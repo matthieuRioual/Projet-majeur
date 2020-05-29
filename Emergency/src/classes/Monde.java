@@ -1,0 +1,59 @@
+package classes;
+
+import java.util.List;
+
+import com.Client_caserne;
+import com.Client_sonde;
+
+import classes.depot.Caserne;
+import classes.detecteur.Sonde;
+import classes.detecteur.Type_detecteur;
+
+public class Monde {
+	
+	private List<Caserne> listcaserne;
+	private List<Sonde> listsonde;
+	
+	Client_caserne com_caserne=new Client_caserne();
+	Client_sonde com_sonde=new Client_sonde();
+
+	public Monde() {
+		super();
+		listcaserne=com_caserne.getcaserne();
+		if(listcaserne.isEmpty())
+			Caserne.max_id=0;
+		else 
+			Caserne.max_id=this.listcaserne.get(listcaserne.size()-1).getId();
+		for(Caserne c:listcaserne) {
+			c.setListvehicule(com_caserne.getvehiculesofcaserne(c.getId()));
+			c.setListpersonnel(com_caserne.getpersonnelsofcaserne(c.getId()));
+		}
+		listsonde=com_sonde.getsonde();
+		if(listsonde.isEmpty())
+			Sonde.max_id=0;
+		else
+			Sonde.max_id=this.listsonde.get(listsonde.size()-1).getId();
+	}
+	
+	public void ajoutCaserne(int position_x,int position_y) {
+		Caserne c=new Caserne(position_x, position_y);
+		this.listcaserne.add(c);
+		com_caserne.Ajout(c);
+	}
+	
+	public void ajoutSonde(Type_detecteur type,int rate,int position_x,int position_y,double erreur) {
+		Sonde s=new Sonde(type,rate,position_x,position_y,erreur);
+		this.listsonde.add(s);
+		com_caserne.Ajout(s);
+	}
+	
+	public List<Caserne> getLisCaserne(){
+		return this.listcaserne;
+	}
+	
+	public List<Sonde> getLisSonde(){
+		return this.listsonde;
+	}
+	
+	
+}
