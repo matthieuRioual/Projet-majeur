@@ -1,10 +1,15 @@
 package classes.depot;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import com.Client_personnel;
+import com.Client_vehicule;
 import com.google.gson.annotations.SerializedName;
 
 import classes.ideable;
+import classes.humain.Fire_type;
 import classes.humain.Personnel;
 import classes.transport.Vehicule;
 
@@ -23,12 +28,44 @@ public class Caserne implements ideable{
 	private List<Personnel> listpersonnel;
 	private List<Vehicule> listvehicule;
 	
+	private Client_vehicule com_vehicule;
+	private Client_personnel com_personnel;
+
+	
 	public Caserne(int position_x,int position_y) {
 		super();
 		this.id=max_id+1;
 		max_id++;
 		this.position_x=position_x;
 		this.position_y=position_y;
+		this.listpersonnel=new ArrayList<Personnel>();
+		this.listvehicule=new ArrayList<Vehicule>();
+		caserne_init(10,30);
+	}
+
+	private void caserne_init(int i, int j) {
+		for(int k = 0;k<i;k++) {
+			System.out.println(this.getPosition_x());
+			System.out.println(this.getPosition_y());
+			System.out.println(this.getId());
+
+			Vehicule v=new Vehicule(this.getPosition_x(),this.getPosition_y(),this.getId());
+			this.listvehicule.add(v);
+			System.out.println(this.getListvehicule().get(0).getId_vehicule());
+			this.com_vehicule.Ajout(v);
+		}
+
+		for(int k = 0;k<j;k++) {
+			Random generator = new Random();
+	    	int number=generator.nextInt(6);
+			Personnel p=new Personnel(Fire_type.values()[number],0,this.getId());
+			this.listpersonnel.add(p);
+			//System.out.println("JEN AI MARRE");
+			//this.com_personnel.Ajout(p);
+		}
+		
+		
+		
 	}
 
 	@Override

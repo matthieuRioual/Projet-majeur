@@ -6,14 +6,15 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
-public abstract class Vehicule {
+public class Vehicule {
 
-	@SerializedName("id")
+	public static int max_id=0;
 	private int id_vehicule;
+	
 	@SerializedName("position_x")
-	private int position_x;
+	private double position_x;
 	@SerializedName("position_y")
-	private int position_y;
+	private double position_y;
 	@SerializedName("type_vehicule")
 	private String type_vehicule;
 	@SerializedName("type_produit")
@@ -22,26 +23,36 @@ public abstract class Vehicule {
 	private double produit;
 	@SerializedName("carburant")
 	private int carburant;
-	@SerializedName("personnel_embarque")
-	private List<Integer> personnel_embarque;
 	@SerializedName("caserne")
 	private int caserne;
+	
+	private List<Integer> personnel_embarque;
+
 	
 	public Vehicule() {
 		super();
 		this.personnel_embarque=new ArrayList<Integer>();
 	}
 	
-	public Vehicule(int id_vehicule, int position_x, int position_y,int caserne) {
+	public Vehicule(double position_x, double position_y,int caserne) {
 		super();
-		this.id_vehicule = id_vehicule;
+		this.id_vehicule = max_id;
+		max_id++;
 		this.position_x = position_x;
 		this.position_y = position_y;
 		this.carburant = 100;
-		this.type_vehicule=this.getClass().getSimpleName();
+		this.type_vehicule="temporaire";
 		this.type_produit="undefined";
 		this.produit=0.0;	
 		this.caserne=caserne;
+	}
+
+	public int getId_vehicule() {
+		return id_vehicule;
+	}
+
+	public void setId_vehicule(int id_vehicule) {
+		this.id_vehicule = id_vehicule;
 	}
 
 	public int getCarburant() {

@@ -16,14 +16,14 @@ import classes.transport.Vehicule;
 public class Client_caserne extends Client{
 	
 	public Client_caserne() {
-		super("http://localhost:5000/rest_api/v1.0/personnel");
+		super("http://localhost:5000/rest_api/v1.0/caserne");
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Caserne> getcaserne() {
 		List<Caserne> listcaserne=new ArrayList<Caserne>();
 		request:try {
-			request = requestFactory.buildGetRequest(new GenericUrl(url));
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()));
 			String response = request.execute().parseAsString();
 			if(response.isEmpty()) {
 				break request;
@@ -41,7 +41,7 @@ public class Client_caserne extends Client{
 	public List<Vehicule> getvehiculesofcaserne(int id) {
 		List<Vehicule> listvehiculeofcaserne=new ArrayList<Vehicule>();
 		request:try {
-			request = requestFactory.buildGetRequest(new GenericUrl(url+"/afficher_vehicules/"+String.valueOf(id)));
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()+"/afficher_vehicules/"+String.valueOf(id)));
 			String response = request.execute().parseAsString();
 			if(response.isEmpty()) {
 				break request;
@@ -60,7 +60,7 @@ public class Client_caserne extends Client{
 	public List<Personnel> getpersonnelsofcaserne(int id) {
 		List<Personnel> listpersonnelofcaserne=new ArrayList<Personnel>();
 		request:try {
-			request = requestFactory.buildGetRequest(new GenericUrl(url+"/afficher_personnel/"+String.valueOf(id)));
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()+"/afficher_personnel/"+String.valueOf(id)));
 			String response = request.execute().parseAsString();
 			if(response.isEmpty()) {
 				break request;

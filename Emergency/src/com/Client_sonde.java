@@ -21,7 +21,7 @@ public class Client_sonde extends Client{
 	public List<Sonde> getsonde() {
 			List<Sonde> listsonde=new ArrayList<Sonde>();
 			request:try {
-				request = requestFactory.buildGetRequest(new GenericUrl(url));
+				request = requestFactory.buildGetRequest(new GenericUrl(getUrl()));
 				String response = request.execute().parseAsString();
 				if(response.isEmpty()) {
 					break request;

@@ -40,8 +40,7 @@ public class Sonde implements ideable{
 	
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.id;
 	}
 
 }

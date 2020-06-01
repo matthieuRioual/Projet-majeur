@@ -18,14 +18,14 @@ import classes.transport.Vehicule;
 public class Client_vehicule extends Client {
 	
 	public Client_vehicule() {
-		super("http://localhost:5000/rest_api/v1.0/vehicules");
+		super("http://localhost:5000/rest_api/v1.0/vehicule");
 	}
 	
 	public void change_carburant(int id,int carburant) {
 		String requestBody = "{ \"carburant\": \"" + (carburant) + "\"}";
 		HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
 		try {
-			request = requestFactory.buildPutRequest(new GenericUrl(url+"/modifier_carburant/"+String.valueOf(id)),byteContent);
+			request = requestFactory.buildPutRequest(new GenericUrl(getUrl()+"/modifier_carburant/"+String.valueOf(id)),byteContent);
 			request.execute().parseAsString();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -36,7 +36,7 @@ public class Client_vehicule extends Client {
 		String requestBody = "{ \"carburant\": \"" + (produit) + "\"}";
 		HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
 		try {
-			request = requestFactory.buildPutRequest(new GenericUrl(url+"/remplir_produit/"+String.valueOf(id)),byteContent);
+			request = requestFactory.buildPutRequest(new GenericUrl(getUrl()+"/remplir_produit/"+String.valueOf(id)),byteContent);
 			request.execute().parseAsString();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -49,7 +49,7 @@ public class Client_vehicule extends Client {
 	public List<Vehicule> getvehicules() {
 		List<Vehicule> listvehicule=new ArrayList<Vehicule>();
 		request:try {
-			request = requestFactory.buildGetRequest(new GenericUrl(url));
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()));
 			String response = request.execute().parseAsString();
 			if(response.isEmpty()) {
 				break request;
@@ -67,7 +67,7 @@ public class Client_vehicule extends Client {
 	public List<Personnel> getpersonnel() {
 		List<Personnel> listpers=new ArrayList<Personnel>();
 		request:try {
-			request = requestFactory.buildGetRequest(new GenericUrl(url));
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()));
 			String response = request.execute().parseAsString();
 			if(response.isEmpty()) {
 				break request;
@@ -85,7 +85,7 @@ public class Client_vehicule extends Client {
 	public List<Personnel> getPersonnelinside(int id){
 		List<Personnel> listin=new ArrayList<Personnel>();
 		request:try {
-			request = requestFactory.buildGetRequest(new GenericUrl(url+"/personnel_embarque/"+Integer.toString(id)));
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()+"/personnel_embarque/"+Integer.toString(id)));
 			String response = request.execute().parseAsString();
 			if(response.isEmpty()) {
 				break request;

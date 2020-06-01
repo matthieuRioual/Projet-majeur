@@ -22,7 +22,7 @@ public class Client_personnel extends Client{
 	public List<Personnel> getpersonnel() {
 		List<Personnel> listpersonnel=new ArrayList<Personnel>();
 		request:try {
-			request = requestFactory.buildGetRequest(new GenericUrl(url));
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()));
 			String response = request.execute().parseAsString();
 			if(response.isEmpty()) {
 				break request;

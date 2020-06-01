@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 import classes.ideable;
 
-public abstract class Personnel implements ideable{
+public class Personnel implements ideable{
 
 	
-	static int max_id;
+	public static int max_id=0;
 	private int id;
 	
 	@SerializedName("categorie_personnel")

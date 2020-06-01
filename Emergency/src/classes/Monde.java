@@ -8,6 +8,8 @@ import com.Client_sonde;
 import classes.depot.Caserne;
 import classes.detecteur.Sonde;
 import classes.detecteur.Type_detecteur;
+import classes.humain.Personnel;
+import classes.transport.Vehicule;
 
 public class Monde {
 	
@@ -27,6 +29,8 @@ public class Monde {
 		for(Caserne c:listcaserne) {
 			c.setListvehicule(com_caserne.getvehiculesofcaserne(c.getId()));
 			c.setListpersonnel(com_caserne.getpersonnelsofcaserne(c.getId()));
+			Vehicule.max_id+=c.getListvehicule().size();
+			Personnel.max_id+=c.getListpersonnel().size();
 		}
 		listsonde=com_sonde.getsonde();
 		if(listsonde.isEmpty())
@@ -44,7 +48,8 @@ public class Monde {
 	public void ajoutSonde(Type_detecteur type,int rate,int position_x,int position_y,double erreur) {
 		Sonde s=new Sonde(type,rate,position_x,position_y,erreur);
 		this.listsonde.add(s);
-		com_caserne.Ajout(s);
+		System.out.println(com_sonde.getUrl());
+		com_sonde.Ajout(s);
 	}
 	
 	public List<Caserne> getLisCaserne(){

@@ -15,7 +15,7 @@ import classes.ideable;
 
 public class Client {
 	
-	protected String url;
+	private String url;
 	HttpRequestFactory requestFactory
 	  = new NetHttpTransport().createRequestFactory();
 	
@@ -23,18 +23,20 @@ public class Client {
 	
 	public Client(String url) {
 		super();
-		this.url=url;
+		this.setUrl(url);
 	}
 	
 	public void Ajout(Object o) {
+		System.out.println("JEN AI MARRE");
 		Gson gson=new Gson();
+
 		String requestBody = gson.toJson(o);
 		HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
-		
+
 
 		try {
 
-			request = requestFactory.buildPostRequest(new GenericUrl(url+"/ajout"),byteContent);
+			request = requestFactory.buildPostRequest(new GenericUrl(getUrl()+"/ajout"),byteContent);
 			String rawResponse = request.execute().parseAsString();
 			System.out.println(rawResponse);
 			
@@ -47,7 +49,7 @@ public class Client {
 
 		try {
 			
-			request = requestFactory.buildDeleteRequest(new GenericUrl(url+"/suppression/"+String.valueOf(id)));
+			request = requestFactory.buildDeleteRequest(new GenericUrl(getUrl()+"/suppression/"+String.valueOf(id)));
 			String rawResponse = request.execute().parseAsString();
 			System.out.println(rawResponse);
 
@@ -60,13 +62,21 @@ public class Client {
 		try {
 			HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
 
-			request = requestFactory.buildPutRequest(new GenericUrl(url+"/mise_a_jour/"+String.valueOf((i.getId()))),byteContent);
+			request = requestFactory.buildPutRequest(new GenericUrl(getUrl()+"/mise_a_jour/"+String.valueOf((i.getId()))),byteContent);
 			request.execute();
 
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 }
