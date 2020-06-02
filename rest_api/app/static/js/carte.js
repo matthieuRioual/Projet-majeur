@@ -1,4 +1,4 @@
-list_circle = [];
+list_marker = [];
 
 var maCarte = L.map('maCarte').setView([45.75, 4.85], 14);
 
@@ -11,17 +11,17 @@ accessToken: 'pk.eyJ1IjoiYWxpY2Vhc2kiLCJhIjoiY2s5MDkwZ3k1MDMwMDNscnI4dG50YmQwNCJ
 
 function fct_intensite_color(intensite){
     var fire_color;
-    if (intensite==1 || intensite==12){
-	    fire_color=#8A2BE2;
+    if (intensite==1){
+	    fire_color='yellow';
     }
     else if (intensite==2){
-	    fire_color='pink';
-    }
-    else if (intensite==3){
 	    fire_color='orange';
     }
-    else if (intensite==4){
+    else if (intensite==3){
 	    fire_color='red';
+    }
+    else if (intensite==4){
+	    fire_color='purple';
     }
     else {
         fire_color='black';
@@ -29,23 +29,31 @@ function fct_intensite_color(intensite){
     return fire_color;
 }
 
+
 function fct_tracer_circle(coord_x, coord_y, intensite, categorie){
     var fire_color=fct_intensite_color(intensite);
     var circle = L.circle([coord_x, coord_y], {
         color: fire_color,
-        //fillColor: '#f03',
         fillOpacity: 1,
         radius: 15
     })
     maCarte.addLayer(circle);
-    list_circle.push(circle);
+    list_marker.push(circle);
+
+    var label = new L.marker([coord_x, coord_y], { opacity: 0.5});
+    label.bindTooltip(categorie, {permanent: false, offset: [0, 0] });
+    label.addTo(maCarte);
+    list_marker.push(label);
+
 }
 
+
+
 function fct_destroy_markers(){
-    var nb_circle = Object.keys(list_circle).length;
-    for (var i = 0 ; i<nb_circle ; i++){
-        circle = list_circle[i];
-        maCarte.removeLayer(circle);
+    var nb_marker = Object.keys(list_marker).length;
+    for (var i = 0 ; i<nb_marker ; i++){
+        marker = list_marker[i];
+        maCarte.removeLayer(marker);
     }
 }
 
@@ -75,7 +83,13 @@ function fct_affichage_feux(){
         complete : function(resultat, statut){
         }
     });
-    setTimeout(fct_affichage_feux,2000)
+    setTimeout(fct_affichage_feux,5000)
 }
 
 fct_affichage_feux();
+
+
+
+
+
+
