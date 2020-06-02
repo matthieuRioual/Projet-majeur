@@ -1,0 +1,15 @@
+h1{
+    color:pink;
+    text-align: center;
+}
+
+body { padding: 2%; margin: 2%; margin-bottom: 10%; }
+
+html, body, #maCarte{
+    height: 98% ;
+}
+
+#maCarte {  
+    width: 100%;
+    border:2px black solid;
+ }
