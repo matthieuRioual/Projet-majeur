@@ -31,6 +31,7 @@ public class Monde {
 			c.setListpersonnel(com_caserne.getpersonnelsofcaserne(c.getId()));
 			Vehicule.max_id+=c.getListvehicule().size();
 			Personnel.max_id+=c.getListpersonnel().size();
+			
 		}
 		listsonde=com_sonde.getsonde();
 		if(listsonde.isEmpty())
@@ -39,8 +40,8 @@ public class Monde {
 			Sonde.max_id=this.listsonde.get(listsonde.size()-1).getId();
 	}
 	
-	public void ajoutCaserne(int position_x,int position_y) {
-		Caserne c=new Caserne(position_x, position_y);
+	public void ajoutCaserne(int position_x,int position_y,int personnel_ini,int vehicule_ini) {
+		Caserne c=new Caserne(position_x, position_y,personnel_ini,vehicule_ini);
 		this.listcaserne.add(c);
 		com_caserne.Ajout(c);
 	}
@@ -48,7 +49,6 @@ public class Monde {
 	public void ajoutSonde(Type_detecteur type,int rate,int position_x,int position_y,double erreur) {
 		Sonde s=new Sonde(type,rate,position_x,position_y,erreur);
 		this.listsonde.add(s);
-		System.out.println(com_sonde.getUrl());
 		com_sonde.Ajout(s);
 	}
 	

@@ -1,22 +1,20 @@
 package main;
 
 import classes.Monde;
-import classes.depot.Caserne;
-import classes.humain.Personnel;
 import classes.transport.Vehicule;
+
 
 public class simulateur_vehicule_sonde {
 
-	
+
 	public static void main(String[] args) throws InterruptedException{
+
 		
 		Monde m=new Monde();
 		System.out.println(Vehicule.max_id);
-		System.out.println(Personnel.max_id);
-
-		//System.out.println(m.getLisCaserne().get(28).getListpersonnel());
-		//System.out.println(m.getLisSonde());
-
+		//m.ajoutSonde(Type_detecteur.CO2, 10000, 15, 100, 12.0);
+		System.out.println(m.getLisCaserne().get(63).getListvehicule());
 	}
+
 	
 }

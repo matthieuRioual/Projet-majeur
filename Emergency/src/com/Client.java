@@ -15,7 +15,7 @@ import classes.ideable;
 
 public class Client {
 	
-	private String url;
+	protected String url;
 	HttpRequestFactory requestFactory
 	  = new NetHttpTransport().createRequestFactory();
 	
@@ -27,7 +27,6 @@ public class Client {
 	}
 	
 	public void Ajout(Object o) {
-		System.out.println("JEN AI MARRE");
 		Gson gson=new Gson();
 
 		String requestBody = gson.toJson(o);
@@ -36,7 +35,7 @@ public class Client {
 
 		try {
 
-			request = requestFactory.buildPostRequest(new GenericUrl(getUrl()+"/ajout"),byteContent);
+			request = requestFactory.buildPostRequest(new GenericUrl(this.getUrl()+"/ajout"),byteContent);
 			String rawResponse = request.execute().parseAsString();
 			System.out.println(rawResponse);
 			
