@@ -1,8 +1,8 @@
 """Vehicules table
 
-Revision ID: 8f157bd2622a
+Revision ID: 4b9eb060f489
 Revises: 
-Create Date: 2020-05-29 15:09:13.041682
+Create Date: 2020-06-02 14:23:03.630631
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '8f157bd2622a'
+revision = '4b9eb060f489'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -40,6 +40,7 @@ def upgrade():
     op.create_index(op.f('ix_personnel_vehicule'), 'personnel', ['vehicule'], unique=False)
     op.create_table('sonde',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('rate', sa.Float(), nullable=True),
     sa.Column('position_x', sa.Float(), nullable=True),
     sa.Column('position_y', sa.Float(), nullable=True),
     sa.Column('etat', sa.Float(), nullable=True),
@@ -50,6 +51,7 @@ def upgrade():
     op.create_index(op.f('ix_sonde_etat'), 'sonde', ['etat'], unique=False)
     op.create_index(op.f('ix_sonde_position_x'), 'sonde', ['position_x'], unique=False)
     op.create_index(op.f('ix_sonde_position_y'), 'sonde', ['position_y'], unique=False)
+    op.create_index(op.f('ix_sonde_rate'), 'sonde', ['rate'], unique=False)
     op.create_table('vehicules',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('position_x', sa.Float(), nullable=True),
@@ -81,6 +83,7 @@ def downgrade():
     op.drop_index(op.f('ix_vehicules_caserne'), table_name='vehicules')
     op.drop_index(op.f('ix_vehicules_carburant'), table_name='vehicules')
     op.drop_table('vehicules')
+    op.drop_index(op.f('ix_sonde_rate'), table_name='sonde')
     op.drop_index(op.f('ix_sonde_position_y'), table_name='sonde')
     op.drop_index(op.f('ix_sonde_position_x'), table_name='sonde')
     op.drop_index(op.f('ix_sonde_etat'), table_name='sonde')
