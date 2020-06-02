@@ -74,7 +74,7 @@ function fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, prod
     list_marker.push(vehicule);
 }
 
-function fct_tracer_caserne(coord_x, coord_y){
+fct_tracer_caserne(coord_x, coord_y){
     var bounds = [[coord_x - 0.0001, coord_y - 0.0001], [coord_x + 0.0008, coord_y + 0.0008]];
     var rectangle = new L.Rectangle(bounds, { 
         color: 'grey'});
@@ -93,7 +93,7 @@ function fct_destroy_markers(){
 
 function fct_affichage_feux(){
     $.ajax({
-        url : 'http://localhost:5001/rest_api/v1.0/sonde/get_incendies',
+        url : 'http://localhost:5001//rest_api/v1.0/sonde/get_incendies',
         type : 'GET',
         dataType : 'json',
         success : function(incendies_json, statut){  
@@ -120,7 +120,7 @@ function fct_affichage_feux(){
 
 function fct_affichage_vehicules(){
     $.ajax({
-        url : 'http://localhost:5001/rest_api/v1.0/vehicule',
+        url : 'http://localhost:5000/rest_api/v1.0/vehicules',
         type : 'GET',
         dataType : 'json',
         success : function(vehicules_json, statut){  
@@ -134,7 +134,50 @@ function fct_affichage_vehicules(){
                 var type_produit=vehicule['type_produit'];
                 var produit=vehicule['produit'];
                 var carburant=vehicule['carburant'];
-                fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, produit, carburant); 
+                var id_caserne = vehicule['caserne']; 
+                $.ajax({
+                    url : 'http://localhost:5001/rest_api/v1.0/caserne/infos/' + id_caserne,
+                    type : 'GET',
+                    dataType : 'json',
+                    success : function(caserne_json, statut){ 
+                        var coord_x_caserne=caserne_json['position_x'];
+                        var coord_y_caserne=caserne_json['position_y'];
+                    }
+                });
+
+                if (coord_x == coord_x_caserne && coord_y == coord_y_caserne){
+                    $.ajax({
+                        url : 'http://localhost:5001/rest_api/v1.0/caserne/afficher_vehicules/' + id_caserne,
+                        type : 'GET',
+                        dataType : 'json',
+                        success : function(vehicule_json, statut){ 
+                            var nb_vehicules=Object.keys(vehicule_json).length;
+                        },
+                        error : function(resultat, statut, erreur){
+                            console.log(erreur);   
+                        },
+                    });
+                    $.ajax({
+                        url : 'http://localhost:5001/rest_api/v1.0/caserne/afficher_personnel/' + id_caserne,
+                        type : 'GET',
+                        dataType : 'json',
+                        success : function(personnel_json, statut){ 
+                            var nb_personnels=Object.keys(personnel_json).length;
+                        },
+                        error : function(resultat, statut, erreur){
+                            console.log(erreur);   
+                        },
+                    });
+
+                    var label = new L.marker([coord_x, coord_y], { opacity: 0.5});
+                    var post_it = 'nombre de vehicules : ' + nb_vehicules + ' et nombre de personnels : ' + nb_personnels;
+                    label.bindTooltip(post_it, {permanent: false, offset: [0, 0] });
+                    label.addTo(maCarte);
+                    list_marker.push(label);                
+                }
+                else{
+                    fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, produit, carburant);
+                } 
             }   
         },
 
@@ -147,7 +190,7 @@ function fct_affichage_vehicules(){
 
 function fct_affichage_sondes(){
     $.ajax({
-        url : 'http://localhost:5001/rest_api/v1.0/sonde',
+        url : 'http://localhost:5000/rest_api/v1.0/sonde/infos/tous',
         type : 'GET',
         dataType : 'json',
         success : function(sondes_json, statut){  
@@ -155,7 +198,7 @@ function fct_affichage_sondes(){
             console.log(nb_sondes + " sondes");
             
             for(var num_sonde = 0; num_sonde<nb_sondes; num_sonde++){
-                sonde=sondes_json[num_sonde];
+                sonde=incendies_json[num_sonde];
                 var coord_x=sonde['position_x'];
                 var coord_y=sonde['position_y'];
                 var type=sonde['type'];
@@ -173,15 +216,15 @@ function fct_affichage_sondes(){
 
 function fct_affichage_casernes(){
     $.ajax({
-        url : 'http://localhost:5001/rest_api/v1.0/caserne',
+        url : 'http://localhost:5000/rest_api/v1.0/caserne',
         type : 'GET',
         dataType : 'json',
         success : function(casernes_json, statut){  
             var nb_casernes = Object.keys(casernes_json).length; 
-            console.log(nb_casernes + " casernes");
+            console.log(nb_casernes + " sondes");
             
             for(var num_caserne = 0; num_caserne<nb_casernes; num_caserne++){
-                caserne=casernes_json[num_caserne];
+                caserne=incendies_json[num_caserne];
                 var coord_x=caserne['position_x'];
                 var coord_y=caserne['position_y'];
                 fct_tracer_caserne(coord_x, coord_y); 

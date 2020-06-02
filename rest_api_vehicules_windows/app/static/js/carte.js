@@ -134,7 +134,50 @@ function fct_affichage_vehicules(){
                 var type_produit=vehicule['type_produit'];
                 var produit=vehicule['produit'];
                 var carburant=vehicule['carburant'];
-                fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, produit, carburant); 
+                var id_caserne = vehicule['caserne']; 
+                $.ajax({
+                    url : 'http://localhost:5001/rest_api/v1.0/caserne/infos/' + id_caserne,
+                    type : 'GET',
+                    dataType : 'json',
+                    success : function(caserne_json, statut){ 
+                        var coord_x_caserne=caserne_json['position_x'];
+                        var coord_y_caserne=caserne_json['position_y'];
+                    }
+                });
+
+                if (coord_x == coord_x_caserne && coord_y == coord_y_caserne){
+                    $.ajax({
+                        url : 'http://localhost:5001/rest_api/v1.0/caserne/afficher_vehicules/' + id_caserne,
+                        type : 'GET',
+                        dataType : 'json',
+                        success : function(vehicule_json, statut){ 
+                            var nb_vehicules=Object.keys(vehicule_json).length;
+                        },
+                        error : function(resultat, statut, erreur){
+                            console.log(erreur);   
+                        },
+                    });
+                    $.ajax({
+                        url : 'http://localhost:5001/rest_api/v1.0/caserne/afficher_personnel/' + id_caserne,
+                        type : 'GET',
+                        dataType : 'json',
+                        success : function(personnel_json, statut){ 
+                            var nb_personnels=Object.keys(personnel_json).length;
+                        },
+                        error : function(resultat, statut, erreur){
+                            console.log(erreur);   
+                        },
+                    });
+
+                    var label = new L.marker([coord_x, coord_y], { opacity: 0.5});
+                    var post_it = 'nombre de vehicules : ' + nb_vehicules + ' et nombre de personnels : ' + nb_personnels;
+                    label.bindTooltip(post_it, {permanent: false, offset: [0, 0] });
+                    label.addTo(maCarte);
+                    list_marker.push(label);                
+                }
+                else{
+                    fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, produit, carburant);
+                } 
             }   
         },
 
