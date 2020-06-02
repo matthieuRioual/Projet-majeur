@@ -21,12 +21,12 @@ public class Sonde implements ideable{
 	private double position_y;
 	
 	@SerializedName("error")
-	private double erreur;
+	private double etat;
 	
-	@SerializedName("detecte")
-	private int detecte;
+	@SerializedName("alarme")
+	private int alarme;
 	
-	public Sonde(Type_detecteur type,int rate,int position_x,int position_y,double erreur) {
+	public Sonde(Type_detecteur type,int rate,double position_x,double position_y,double etat) {
 		super();
 		this.id=max_id;
 		max_id++;
@@ -34,8 +34,8 @@ public class Sonde implements ideable{
 		this.rate=rate;
 		this.position_x=position_x;
 		this.position_y=position_y;
-		this.erreur=erreur;
-		this.detecte=0;
+		this.etat=etat;
+		this.alarme=0;
 	}
 	
 	@Override

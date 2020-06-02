@@ -34,7 +34,7 @@ public class Caserne implements ideable{
 	private Client_personnel com_personnel=new Client_personnel();
 
 	
-	public Caserne(int position_x,int position_y,int personnel_ini,int vehicule_ini) {
+	public Caserne(double position_x,double position_y,int personnel_ini,int vehicule_ini) {
 		super();
 		this.id=max_id+1;
 		max_id++;

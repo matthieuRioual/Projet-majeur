@@ -40,14 +40,14 @@ public class Monde {
 			Sonde.max_id=this.listsonde.get(listsonde.size()-1).getId();
 	}
 	
-	public void ajoutCaserne(int position_x,int position_y,int personnel_ini,int vehicule_ini) {
+	public void ajoutCaserne(double position_x,double position_y,int personnel_ini,int vehicule_ini) {
 		Caserne c=new Caserne(position_x, position_y,personnel_ini,vehicule_ini);
 		this.listcaserne.add(c);
 		com_caserne.Ajout(c);
 	}
 	
-	public void ajoutSonde(Type_detecteur type,int rate,int position_x,int position_y,double erreur) {
-		Sonde s=new Sonde(type,rate,position_x,position_y,erreur);
+	public void ajoutSonde(/*Type_detecteur type,*/int rate,double position_x,double position_y,double etat) {
+		Sonde s=new Sonde(/*type,*/rate,position_x,position_y,etat);
 		this.listsonde.add(s);
 		com_sonde.Ajout(s);
 	}

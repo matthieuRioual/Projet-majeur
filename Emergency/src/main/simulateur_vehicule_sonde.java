@@ -1,6 +1,7 @@
 package main;
 
 import classes.Monde;
+import classes.detecteur.Type_detecteur;
 import classes.transport.Vehicule;
 
 
@@ -12,8 +13,9 @@ public class simulateur_vehicule_sonde {
 		
 		Monde m=new Monde();
 		System.out.println(Vehicule.max_id);
-		//m.ajoutSonde(Type_detecteur.CO2, 10000, 15, 100, 12.0);
-		System.out.println(m.getLisCaserne().get(63).getListvehicule());
+		m.ajoutCaserne(45.754, 4.857, 2, 10);
+		//m.ajoutSonde(5000, 45.746, 4.807, 4.0);
+		
 	}
 
 	

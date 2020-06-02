@@ -10,6 +10,7 @@ from app import app
 from app import db
 from app.models import Vehicules, Personnel, Caserne, Sonde
 import requests, json
+from math import sqrt
 
 @app.route('/')
 @app.route('/index')
@@ -378,35 +379,36 @@ def recuperer_feux_par_sonde():
             y = s.position_y
             rayon = 0
             if s.etat == 1 :
-                rayon = 0.000001
+                rayon = 0.001
             if s.etat == 2 :
-                rayon = 0.000005
+                rayon = 0.002
             if s.etat == 3 :
-                rayon = 0.00001
+                rayon = 0.003
             if s.etat == 4 :
-                rayon = 0.00005
+                rayon = 0.004
             if s.etat == 5 :
-                rayon = 0.0001
+                rayon = 0.005
             for i in r :
-                if i['position_x'] - x <= rayon :
-                    if i['position_y'] - y <= rayon :
-                        s.alarme = 1
-                        if i in liste :
-                            print("")
-                        else :
-                            dictionnaire_intermediaire = dict()
-                            dictionnaire_intermediaire["id"] = i["id"]
-                            dictionnaire_intermediaire["position_x"] = i["position_x"]
-                            dictionnaire_intermediaire["position_y"] = i["position_y"]
-                            dictionnaire_intermediaire["intensite"] = i["intensite"]
-                            dictionnaire_intermediaire["categorie"] = i["categorie"]
-                            liste.append(dictionnaire_intermediaire)
+                if(calcul_distance(i['position_x'],i['position_y'],x,y) <= rayon):
+                    s.alarme = 1
+                    if i in liste :
+                        continue
                     else :
-                        s.alarme = 0
+                        dictionnaire_intermediaire = dict()
+                        dictionnaire_intermediaire["id"] = i["id"]
+                        dictionnaire_intermediaire["position_x"] = i["position_x"]
+                        dictionnaire_intermediaire["position_y"] = i["position_y"]
+                        dictionnaire_intermediaire["intensite"] = i["intensite"]
+                        dictionnaire_intermediaire["categorie"] = i["categorie"]
+                        liste.append(dictionnaire_intermediaire)
                 else :
                     s.alarme = 0
     db.session.commit()
             
     return(jsonify(liste))
+
+def calcul_distance(x1,y1,x2,y2):
+	distance=sqrt((x1-x2)**2+(y1-y2)**2)
+	return distance
 
     

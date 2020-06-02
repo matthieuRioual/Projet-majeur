@@ -14,7 +14,7 @@ import classes.detecteur.Sonde;
 public class Client_sonde extends Client{
 
 	public Client_sonde() {
-		super("http://localhost:5000/rest_api/v1.0/sonde");
+		super("http://localhost:5001/rest_api/v1.0/sonde");
 	}
 
 	@SuppressWarnings("unchecked")

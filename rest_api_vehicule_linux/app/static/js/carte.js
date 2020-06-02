@@ -74,7 +74,7 @@ function fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, prod
     list_marker.push(vehicule);
 }
 
-fct_tracer_caserne(coord_x, coord_y){
+function fct_tracer_caserne(coord_x, coord_y){
     var bounds = [[coord_x - 0.0001, coord_y - 0.0001], [coord_x + 0.0008, coord_y + 0.0008]];
     var rectangle = new L.Rectangle(bounds, { 
         color: 'grey'});
@@ -93,7 +93,7 @@ function fct_destroy_markers(){
 
 function fct_affichage_feux(){
     $.ajax({
-        url : 'http://localhost:5001//rest_api/v1.0/sonde/get_incendies',
+        url : 'http://localhost:5001/rest_api/v1.0/sonde/get_incendies',
         type : 'GET',
         dataType : 'json',
         success : function(incendies_json, statut){  
@@ -120,7 +120,7 @@ function fct_affichage_feux(){
 
 function fct_affichage_vehicules(){
     $.ajax({
-        url : 'http://localhost:5000/rest_api/v1.0/vehicules',
+        url : 'http://localhost:5001/rest_api/v1.0/vehicule',
         type : 'GET',
         dataType : 'json',
         success : function(vehicules_json, statut){  
@@ -147,7 +147,7 @@ function fct_affichage_vehicules(){
 
 function fct_affichage_sondes(){
     $.ajax({
-        url : 'http://localhost:5000/rest_api/v1.0/sonde/infos/tous',
+        url : 'http://localhost:5001/rest_api/v1.0/sonde',
         type : 'GET',
         dataType : 'json',
         success : function(sondes_json, statut){  
@@ -155,7 +155,7 @@ function fct_affichage_sondes(){
             console.log(nb_sondes + " sondes");
             
             for(var num_sonde = 0; num_sonde<nb_sondes; num_sonde++){
-                sonde=incendies_json[num_sonde];
+                sonde=sondes_json[num_sonde];
                 var coord_x=sonde['position_x'];
                 var coord_y=sonde['position_y'];
                 var type=sonde['type'];
@@ -173,15 +173,15 @@ function fct_affichage_sondes(){
 
 function fct_affichage_casernes(){
     $.ajax({
-        url : 'http://localhost:5000/rest_api/v1.0/caserne',
+        url : 'http://localhost:5001/rest_api/v1.0/caserne',
         type : 'GET',
         dataType : 'json',
         success : function(casernes_json, statut){  
             var nb_casernes = Object.keys(casernes_json).length; 
-            console.log(nb_casernes + " sondes");
+            console.log(nb_casernes + " casernes");
             
             for(var num_caserne = 0; num_caserne<nb_casernes; num_caserne++){
-                caserne=incendies_json[num_caserne];
+                caserne=casernes_json[num_caserne];
                 var coord_x=caserne['position_x'];
                 var coord_y=caserne['position_y'];
                 fct_tracer_caserne(coord_x, coord_y); 

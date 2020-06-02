@@ -14,7 +14,7 @@ import classes.humain.Personnel;
 public class Client_personnel extends Client{
 
 	public Client_personnel() {
-		super("http://localhost:5000/rest_api/v1.0/personnel");
+		super("http://localhost:5001/rest_api/v1.0/personnel");
 	}
 	
 	
