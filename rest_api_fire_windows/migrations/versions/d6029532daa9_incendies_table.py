@@ -1,8 +1,8 @@
 """Incendies table
 
-Revision ID: 297825f59c61
+Revision ID: d6029532daa9
 Revises: 
-Create Date: 2020-06-03 09:31:03.112344
+Create Date: 2020-06-03 14:06:45.956976
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '297825f59c61'
+revision = 'd6029532daa9'
 down_revision = None
 branch_labels = None
 depends_on = None

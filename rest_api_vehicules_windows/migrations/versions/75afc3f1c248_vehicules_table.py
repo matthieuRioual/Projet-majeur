@@ -1,8 +1,8 @@
 """Vehicules table
 
-Revision ID: 90e0565038d9
+Revision ID: 75afc3f1c248
 Revises: 
-Create Date: 2020-06-03 08:50:49.741834
+Create Date: 2020-06-03 14:10:56.429305
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '90e0565038d9'
+revision = '75afc3f1c248'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -63,10 +63,12 @@ def upgrade():
     sa.Column('produit', sa.Float(), nullable=True),
     sa.Column('carburant', sa.Float(), nullable=True),
     sa.Column('caserne', sa.Integer(), nullable=True),
+    sa.Column('disponibilite', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_vehicules_carburant'), 'vehicules', ['carburant'], unique=False)
     op.create_index(op.f('ix_vehicules_caserne'), 'vehicules', ['caserne'], unique=False)
+    op.create_index(op.f('ix_vehicules_disponibilite'), 'vehicules', ['disponibilite'], unique=False)
     op.create_index(op.f('ix_vehicules_position_x'), 'vehicules', ['position_x'], unique=False)
     op.create_index(op.f('ix_vehicules_position_y'), 'vehicules', ['position_y'], unique=False)
     op.create_index(op.f('ix_vehicules_produit'), 'vehicules', ['produit'], unique=False)
@@ -82,6 +84,7 @@ def downgrade():
     op.drop_index(op.f('ix_vehicules_produit'), table_name='vehicules')
     op.drop_index(op.f('ix_vehicules_position_y'), table_name='vehicules')
     op.drop_index(op.f('ix_vehicules_position_x'), table_name='vehicules')
+    op.drop_index(op.f('ix_vehicules_disponibilite'), table_name='vehicules')
     op.drop_index(op.f('ix_vehicules_caserne'), table_name='vehicules')
     op.drop_index(op.f('ix_vehicules_carburant'), table_name='vehicules')
     op.drop_table('vehicules')
