@@ -18,6 +18,7 @@ class Vehicules(db.Model):
     produit = db.Column(db.Float, index=True)
     carburant = db.Column(db.Float, index=True)
     caserne = db.Column(db.Integer, index=True)
+    disponibilite = db.Column(db.Integer, index = True)
     
     def __repr__(self):
         return '<Vehicules {}>'.format(self.position_x)  
@@ -50,6 +51,7 @@ class Sonde(db.Model):
     position_y = db.Column(db.Float, index = True)
     etat = db.Column(db.Float, index = True)
     alarme = db.Column(db.Integer, index = True)
+    type = db.Column(db.String, index = True)
 
     def __repr__(self):
         return '<Sonde {}>'.format(self.position_x)

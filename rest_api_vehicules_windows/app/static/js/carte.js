@@ -126,6 +126,11 @@ function fct_affichage_feux(){
         url : 'http://localhost:5000/rest_api/v1.0/incendies/get_detectes',
         type : 'GET',
         dataType : 'json',
+        contentType : "application/json",
+        headers: {
+            "accept": "application/json",
+            "Access-Control-Allow-Origin":"*"
+        },
         success : function(incendies_json, statut){  
             var nb_incendies = Object.keys(incendies_json).length; 
             console.log(nb_incendies + " incendies");
@@ -150,7 +155,7 @@ function fct_affichage_feux(){
 
 function fct_affichage_vehicules(){
     $.ajax({
-        url : 'http://localhost:5000/rest_api/v1.0/vehicule',
+        url : 'http://localhost:5001/rest_api/v1.0/vehicule',
         type : 'GET',
         dataType : 'json',
         success : function(vehicules_json, statut){  
@@ -171,13 +176,9 @@ function fct_affichage_vehicules(){
                     type : 'GET',
                     dataType : 'json',
                     success : function(caserne_json, statut){ 
-                        var coord_x_caserne=caserne_json['position_x'];
-                        var coord_y_caserne=caserne_json['position_y'];
-                    
-                        if (coord_x == coord_x_caserne && coord_y == coord_y_caserne){
-                            continue           
-                        }
-                        else{
+                        let coord_x_caserne=caserne_json[0]['position_x'];
+                        let coord_y_caserne=caserne_json[0]['position_y'];
+                        if (!(coord_x == coord_x_caserne && coord_y == coord_y_caserne)){
                             fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, produit, carburant);
                         }
                     }
@@ -194,7 +195,7 @@ function fct_affichage_vehicules(){
 
 function fct_affichage_sondes(){
     $.ajax({
-        url : 'http://localhost:5000/rest_api/v1.0/sonde',
+        url : 'http://localhost:5001/rest_api/v1.0/sonde',
         type : 'GET',
         dataType : 'json',
         success : function(sondes_json, statut){  
@@ -220,7 +221,7 @@ function fct_affichage_sondes(){
 
 function fct_affichage_casernes(){
     $.ajax({
-        url : 'http://localhost:5000/rest_api/v1.0/caserne',
+        url : 'http://localhost:5001/rest_api/v1.0/caserne',
         type : 'GET',
         dataType : 'json',
         success : function(casernes_json, statut){  

@@ -1,8 +1,5 @@
 package classes.transport;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.annotations.SerializedName;
 
 import classes.ideable;
@@ -33,12 +30,13 @@ public class Vehicule implements ideable{
 	@SerializedName("caserne")
 	private int caserne;
 	
-	private List<Integer> personnel_embarque;
+	@SerializedName("disponibilite")
+	private int disponibilite;
 	
 	public Vehicule(double position_x, double position_y,int id_caserne) {
 		super();
-		this.id = this.max_id;
-		this.max_id++;
+		this.id = Vehicule.max_id;
+		Vehicule.max_id++;
 		this.position_x = position_x;
 		this.position_y = position_y;
 		this.type_vehicule=new String("temporaire");
@@ -46,7 +44,7 @@ public class Vehicule implements ideable{
 		this.produit=0;	
 		this.carburant = 100;
 		this.caserne=id_caserne;
-		this.personnel_embarque=new ArrayList<Integer>();
+		this.disponibilite=0;
 	}
 
 	public int getId() {
@@ -65,17 +63,6 @@ public class Vehicule implements ideable{
 		this.carburant=carb;
 	}
 	
-	public List<Integer> personnel_embarque() {
-		return this.personnel_embarque;
-	}
-	
-	public void setPersonel_embarque(int[] id_pers) {
-		for(int i:id_pers) {
-			if(!personnel_embarque().contains(i))
-				personnel_embarque.add(i);				
-		}
-	}
-	
 	public double getPosition_x() {
 		return position_x;
 	}
@@ -92,6 +79,11 @@ public class Vehicule implements ideable{
 		this.position_y = position_y;
 	}
 
+	public boolean isdisponible() {
+		if(this.disponibilite==0)
+			return true;
+		return false;
+	}
 	
 	
 }

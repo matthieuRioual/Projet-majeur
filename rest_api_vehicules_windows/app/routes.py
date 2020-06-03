@@ -229,7 +229,7 @@ def creer_caserne():
         db.session.commit()
     return('Votre caserne est ajoutée !')
 
-@app.route('/rest_api/v1.0/caserne/supprimer/<int:caserne_id>', methods=['POST', 'DELETE','PUT']) # supprime une caserne
+@app.route('/rest_api/v1.0/caserne/suppression/<int:caserne_id>', methods=['POST', 'DELETE','PUT']) # supprime une caserne
 def suppression_caserne(caserne_id):
     if request.method == 'DELETE':
         casernes = Caserne.query.all()
@@ -372,17 +372,17 @@ def get_vehicules_disponibles():
         vehicules = Vehicules.query.all()
         resultat = []
         for v in vehicules :
-            if v.disponibilite == 0:
+            if (v.disponibilite == 0):
                 dictionnaire_intermediaire = dict()
-                dictionnaire_intermediaire["position_x"] = i.position_x
-                dictionnaire_intermediaire["position_y"] = i.position_y
-                dictionnaire_intermediaire["type_vehicule"] = i.type_vehicule
-                dictionnaire_intermediaire["type_produit"] = i.type_produit
-                dictionnaire_intermediaire["produit"] = i.produit
-                dictionnaire_intermediaire["carburant"] = i.carburant
-                dictionnaire_intermediaire["id"] = i.id
-                dictionnaire_intermediaire["caserne"] = i.caserne
-                dictionnaire_intermediaire["disponibilite"] = i.disponibilite
+                dictionnaire_intermediaire["position_x"] = v.position_x
+                dictionnaire_intermediaire["position_y"] = v.position_y
+                dictionnaire_intermediaire["type_vehicule"] = v.type_vehicule
+                dictionnaire_intermediaire["type_produit"] = v.type_produit
+                dictionnaire_intermediaire["produit"] = v.produit
+                dictionnaire_intermediaire["carburant"] = v.carburant
+                dictionnaire_intermediaire["id"] = v.id
+                dictionnaire_intermediaire["caserne"] = v.caserne
+                dictionnaire_intermediaire["disponibilite"] = v.disponibilite
                 resultat.append(dictionnaire_intermediaire)
     return jsonify(resultat)
 
@@ -395,15 +395,15 @@ def get_vehicules_non_disponibles():
         for v in vehicules :
             if v.disponibilite != 0:
                 dictionnaire_intermediaire = dict()
-                dictionnaire_intermediaire["position_x"] = i.position_x
-                dictionnaire_intermediaire["position_y"] = i.position_y
-                dictionnaire_intermediaire["type_vehicule"] = i.type_vehicule
-                dictionnaire_intermediaire["type_produit"] = i.type_produit
-                dictionnaire_intermediaire["produit"] = i.produit
-                dictionnaire_intermediaire["carburant"] = i.carburant
-                dictionnaire_intermediaire["id"] = i.id
-                dictionnaire_intermediaire["caserne"] = i.caserne
-                dictionnaire_intermediaire["disponibilite"] = i.disponibilite
+                dictionnaire_intermediaire["position_x"] = v.position_x
+                dictionnaire_intermediaire["position_y"] = v.position_y
+                dictionnaire_intermediaire["type_vehicule"] = v.type_vehicule
+                dictionnaire_intermediaire["type_produit"] = v.type_produit
+                dictionnaire_intermediaire["produit"] = v.produit
+                dictionnaire_intermediaire["carburant"] = v.carburant
+                dictionnaire_intermediaire["id"] = v.id
+                dictionnaire_intermediaire["caserne"] = v.caserne
+                dictionnaire_intermediaire["disponibilite"] = v.disponibilite
                 resultat.append(dictionnaire_intermediaire)
     return jsonify(resultat)
 

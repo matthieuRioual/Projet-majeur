@@ -20,7 +20,7 @@ public class Sonde implements ideable{
 	@SerializedName("position_y")
 	private double position_y;
 	
-	@SerializedName("error")
+	@SerializedName("etat")
 	private double etat;
 	
 	@SerializedName("alarme")

@@ -43,13 +43,47 @@ public class Client_vehicule extends Client {
 		}
 	}
 
-	
-	
 	@SuppressWarnings("unchecked")
 	public List<Vehicule> getvehicules() {
 		List<Vehicule> listvehicule=new ArrayList<Vehicule>();
 		request:try {
 			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()));
+			String response = request.execute().parseAsString();
+			if(response.isEmpty()) {
+				break request;
+			}				
+			Type collectionType = new TypeToken<List<Vehicule>>(){}.getType();
+			listvehicule = (List<Vehicule>) new Gson()
+			               .fromJson( response ,collectionType);
+			} catch (IOException e) {
+			e.printStackTrace();
+		}
+	return listvehicule;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Vehicule> getvehiculesdisponibles() {
+		List<Vehicule> listvehicule=new ArrayList<Vehicule>();
+		request:try {
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()+"/disponible"));
+			String response = request.execute().parseAsString();
+			if(response.isEmpty()) {
+				break request;
+			}				
+			Type collectionType = new TypeToken<List<Vehicule>>(){}.getType();
+			listvehicule = (List<Vehicule>) new Gson()
+			               .fromJson( response ,collectionType);
+			} catch (IOException e) {
+			e.printStackTrace();
+		}
+	return listvehicule;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Vehicule> getvehiculesnondisponibles() {
+		List<Vehicule> listvehicule=new ArrayList<Vehicule>();
+		request:try {
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()+"/non_disponible"));
 			String response = request.execute().parseAsString();
 			if(response.isEmpty()) {
 				break request;

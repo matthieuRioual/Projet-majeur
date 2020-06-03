@@ -12,6 +12,8 @@ from app.models import Incendies
 from math import sqrt
 import requests
 
+
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -104,7 +106,9 @@ def prendre_en_charge(incendie_id):
                 db.session.commit()
     return("Prise en charge effectuée")
 
+
 @app.route('/rest_api/v1.0/incendies/get_detectes', methods=['GET', 'DELETE','PUT'])
+@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def get_detectes():
     if request.method == 'GET':
         incendies = Incendies.query.all()

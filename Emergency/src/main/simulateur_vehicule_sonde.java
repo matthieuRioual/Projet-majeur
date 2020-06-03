@@ -1,8 +1,9 @@
 package main;
 
+import java.util.concurrent.TimeUnit;
+
 import classes.Monde;
-import classes.detecteur.Type_detecteur;
-import classes.transport.Vehicule;
+
 
 
 public class simulateur_vehicule_sonde {
@@ -12,10 +13,14 @@ public class simulateur_vehicule_sonde {
 
 		
 		Monde m=new Monde();
-		System.out.println(Vehicule.max_id);
-		m.ajoutCaserne(45.754, 4.857, 2, 10);
-		//m.ajoutSonde(5000, 45.746, 4.807, 4.0);
-		
+		m.tout_supprimer();
+		Monde m2=new Monde();
+		m2.ajoutCaserne(45.75, 4.85, 3, 2);
+		while(true) {
+			m2.turn();
+			TimeUnit.SECONDS.sleep(3);
+
+		}	
 	}
 
 	

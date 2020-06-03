@@ -32,6 +32,7 @@ def get_vehicules():
             dictionnaire_intermediaire["carburant"] = i.carburant
             dictionnaire_intermediaire["id"] = i.id
             dictionnaire_intermediaire["caserne"] = i.caserne
+            dictionnaire_intermediaire["disponibilite"] = i.disponibilite
             resultat.append(dictionnaire_intermediaire)
         return jsonify(resultat)
 
@@ -52,13 +53,14 @@ def get_vehicules_par_id(vehicule_id):
                 dictionnaire_intermediaire["carburant"] = i.carburant
                 dictionnaire_intermediaire["id"] = i.id 
                 dictionnaire_intermediaire["caserne"] = i.caserne
+                dictionnaire_intermediaire["disponibilite"] = i.disponibilite
                 resultat.append(dictionnaire_intermediaire)
         return jsonify(resultat)
 
 @app.route('/rest_api/v1.0/vehicule/ajout', methods=['GET','POST']) # Permet de stocker un nouveau véhicule
 def ajout_vehicule():
     if request.method == 'POST':
-        vehicule = Vehicules(position_x=request.json['position_x'], position_y=request.json['position_y'], type_vehicule = request.json['type_vehicule'], type_produit = request.json['type_produit'], produit= request.json['produit'], carburant= request.json['carburant'], caserne= request.json['caserne'])
+        vehicule = Vehicules(disponibilite=0, position_x=request.json['position_x'], position_y=request.json['position_y'], type_vehicule = request.json['type_vehicule'], type_produit = request.json['type_produit'], produit= request.json['produit'], carburant= request.json['carburant'], caserne= request.json['caserne'])
         db.session.add(vehicule)
         db.session.commit()
     return('Votre véhicule est ajoute !')
@@ -74,7 +76,7 @@ def suppression_vehicule(vehicule_id):
                 db.session.commit()
     return('Le véhicule est supprime !')
 
-@app.route('/rest_api/v1.0/vehicule/mise_a_jour_position/<int:vehicule_id>', methods=['GET', 'DELETE','PUT']) # Met à jour la position du véhicule
+@app.route('/rest_api/v1.0/vehicule/mise_a_jour_position/<int:vehicule_id>', methods=['GET', 'DELETE','PUT']) # Met à jour la position du véhicule, son essence et sa disponibilite
 def maj_vehicule_position(vehicule_id):
     if request.method == 'PUT':
         vehicules = Vehicules.query.all()
@@ -82,18 +84,11 @@ def maj_vehicule_position(vehicule_id):
             if i.id == vehicule_id:
                 i.position_x = request.json.get('position_x', i.position_x)
                 i.position_y = request.json.get('position_y', i.position_y)
-                db.session.commit()
-    return('Position du véhicule modifiée !')
-
-@app.route('/rest_api/v1.0/vehicule/modifier_carburant/<int:vehicule_id>', methods=['GET', 'DELETE','PUT']) # modifie la quantité d'essence du véhicule
-def maj_carburant(vehicule_id):
-    if request.method == 'PUT':
-        vehicules = Vehicules.query.all()
-        for i in vehicules :
-            if i.id == vehicule_id:
                 i.carburant = request.json.get('carburant', i.carburant)
+                i.disponibilite = request.json.get('disponibilite', i.disponibilite)
                 db.session.commit()
-    return('Carburant modifié !')
+    return('attributs du véhicule modifiés !')
+
 
 @app.route('/rest_api/v1.0/vehicule/remplir_produit/<int:vehicule_id>', methods=['POST', 'DELETE','PUT']) # modifie la quantité de produit du véhicule
 def maj_produit(vehicule_id):
@@ -234,7 +229,7 @@ def creer_caserne():
         db.session.commit()
     return('Votre caserne est ajoutée !')
 
-@app.route('/rest_api/v1.0/caserne/supprimer/<int:caserne_id>', methods=['POST', 'DELETE','PUT']) # supprime une caserne
+@app.route('/rest_api/v1.0/caserne/suppression/<int:caserne_id>', methods=['POST', 'DELETE','PUT']) # supprime une caserne
 def suppression_caserne(caserne_id):
     if request.method == 'DELETE':
         casernes = Caserne.query.all()
@@ -247,7 +242,7 @@ def suppression_caserne(caserne_id):
 @app.route('/rest_api/v1.0/sonde/ajout', methods=['POST', 'DELETE','PUT']) # cree une sonde
 def creer_sonde():
     if request.method == 'POST':
-        sonde = Sonde(rate=request.json['rate'], position_x=request.json['position_x'], position_y=request.json['position_y'], etat=request.json['etat'], alarme=0)
+        sonde = Sonde(type=request.json['type'], rate=request.json['rate'], position_x=request.json['position_x'], position_y=request.json['position_y'], etat=request.json['etat'], alarme=0)
         db.session.add(sonde)
         db.session.commit()
     return('Votre sonde est ajoutée !')
@@ -303,6 +298,7 @@ def get_sonde_by_id(sonde_id):
                 dictionnaire_intermediaire["etat"] = i.etat
                 dictionnaire_intermediaire["id"] = i.id
                 dictionnaire_intermediaire["alarme"] = i.alarme
+                dictionnaire_intermediaire["type"] = i.type
                 resultat.append(dictionnaire_intermediaire)
         return jsonify(resultat)
 
@@ -319,6 +315,7 @@ def get_sondes():
             dictionnaire_intermediaire["etat"] = i.etat
             dictionnaire_intermediaire["id"] = i.id
             dictionnaire_intermediaire["alarme"] = i.alarme
+            dictionnaire_intermediaire["type"] = i.type
             resultat.append(dictionnaire_intermediaire)
     return jsonify(resultat)
 
@@ -338,6 +335,7 @@ def get_vehicules_par_caserne(caserne_id):
                 dictionnaire_intermediaire["carburant"] = i.carburant
                 dictionnaire_intermediaire["id"] = i.id
                 dictionnaire_intermediaire["caserne"] = i.caserne
+                dictionnaire_intermediaire["disponibilite"] = i.disponibilite
                 resultat.append(dictionnaire_intermediaire)
     return jsonify(resultat)
 
@@ -367,6 +365,50 @@ def modifier_etat(sonde_id):
                 db.session.commit()
     return('Modification faite !')
 
+
+@app.route('/rest_api/v1.0/vehicule/disponible', methods=['GET', 'DELETE','PUT']) # donne tous les véhicules disponibles
+def get_vehicules_disponibles():
+    if request.method == 'GET':
+        vehicules = Vehicules.query.all()
+        resultat = []
+        for v in vehicules :
+            if (v.disponibilite == 0):
+                dictionnaire_intermediaire = dict()
+                dictionnaire_intermediaire["position_x"] = v.position_x
+                dictionnaire_intermediaire["position_y"] = v.position_y
+                dictionnaire_intermediaire["type_vehicule"] = v.type_vehicule
+                dictionnaire_intermediaire["type_produit"] = v.type_produit
+                dictionnaire_intermediaire["produit"] = v.produit
+                dictionnaire_intermediaire["carburant"] = v.carburant
+                dictionnaire_intermediaire["id"] = v.id
+                dictionnaire_intermediaire["caserne"] = v.caserne
+                dictionnaire_intermediaire["disponibilite"] = v.disponibilite
+                resultat.append(dictionnaire_intermediaire)
+    return jsonify(resultat)
+
+
+@app.route('/rest_api/v1.0/vehicule/non_disponible', methods=['GET', 'DELETE','PUT']) # donne tous les vehicules non disponibles
+def get_vehicules_non_disponibles():
+    if request.method == 'GET':
+        vehicules = Vehicules.query.all()
+        resultat = []
+        for v in vehicules :
+            if v.disponibilite != 0:
+                dictionnaire_intermediaire = dict()
+                dictionnaire_intermediaire["position_x"] = v.position_x
+                dictionnaire_intermediaire["position_y"] = v.position_y
+                dictionnaire_intermediaire["type_vehicule"] = v.type_vehicule
+                dictionnaire_intermediaire["type_produit"] = v.type_produit
+                dictionnaire_intermediaire["produit"] = v.produit
+                dictionnaire_intermediaire["carburant"] = v.carburant
+                dictionnaire_intermediaire["id"] = v.id
+                dictionnaire_intermediaire["caserne"] = v.caserne
+                dictionnaire_intermediaire["disponibilite"] = v.disponibilite
+                resultat.append(dictionnaire_intermediaire)
+    return jsonify(resultat)
+
+
+"""
 @app.route('/rest_api/v1.0/sonde/get_incendies', methods=['GET', 'DELETE','PUT']) 
 def recuperer_feux_par_sonde():
     r = 0
@@ -411,4 +453,16 @@ def calcul_distance(x1,y1,x2,y2):
 	distance=sqrt((x1-x2)**2+(y1-y2)**2)
 	return distance
 
-    
+   """ 
+@app.route('/rest_api/v1.0/sonde/modifier_alarme/<int:sonde_id>', methods=['GET', 'DELETE','PUT']) # modifie le bit d'alarme d'une sonde
+def modifier_alarme(sonde_id):
+    if request.method == 'GET':
+        sondes = Sonde.query.all()
+        for i in sondes :
+            if i.id == sonde_id:
+                if i.alarme == 0:
+                    i.alarme = 1
+                else :
+                    i.alarme = 0
+                db.session.commit()
+    return('Modification faite !')
