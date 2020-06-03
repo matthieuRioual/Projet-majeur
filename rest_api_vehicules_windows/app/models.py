@@ -50,6 +50,7 @@ class Sonde(db.Model):
     position_y = db.Column(db.Float, index = True)
     etat = db.Column(db.Float, index = True)
     alarme = db.Column(db.Integer, index = True)
+    type = db.Column(db.String, index = True)
 
     def __repr__(self):
         return '<Sonde {}>'.format(self.position_x)

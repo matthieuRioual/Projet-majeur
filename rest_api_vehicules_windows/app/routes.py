@@ -247,7 +247,7 @@ def suppression_caserne(caserne_id):
 @app.route('/rest_api/v1.0/sonde/ajout', methods=['POST', 'DELETE','PUT']) # cree une sonde
 def creer_sonde():
     if request.method == 'POST':
-        sonde = Sonde(rate=request.json['rate'], position_x=request.json['position_x'], position_y=request.json['position_y'], etat=request.json['etat'], alarme=0)
+        sonde = Sonde(type=request.json['type'], rate=request.json['rate'], position_x=request.json['position_x'], position_y=request.json['position_y'], etat=request.json['etat'], alarme=0)
         db.session.add(sonde)
         db.session.commit()
     return('Votre sonde est ajoutée !')
@@ -303,6 +303,7 @@ def get_sonde_by_id(sonde_id):
                 dictionnaire_intermediaire["etat"] = i.etat
                 dictionnaire_intermediaire["id"] = i.id
                 dictionnaire_intermediaire["alarme"] = i.alarme
+                dictionnaire_intermediaire["type"] = i.type
                 resultat.append(dictionnaire_intermediaire)
         return jsonify(resultat)
 
@@ -319,6 +320,7 @@ def get_sondes():
             dictionnaire_intermediaire["etat"] = i.etat
             dictionnaire_intermediaire["id"] = i.id
             dictionnaire_intermediaire["alarme"] = i.alarme
+            dictionnaire_intermediaire["type"] = i.type
             resultat.append(dictionnaire_intermediaire)
     return jsonify(resultat)
 
@@ -412,3 +414,15 @@ def calcul_distance(x1,y1,x2,y2):
 	return distance
 
     
+@app.route('/rest_api/v1.0/sonde/modifier_alarme/<int:sonde_id>', methods=['GET', 'DELETE','PUT']) # Répare (ou abîme) une sonde
+def modifier_alarme(sonde_id):
+    if request.method == 'GET':
+        sondes = Sonde.query.all()
+        for i in sondes :
+            if i.id == sonde_id:
+                if i.alarme == 0:
+                    i.alarme = 1
+                else :
+                    i.alarme = 0
+                db.session.commit()
+    return('Modification faite !')
