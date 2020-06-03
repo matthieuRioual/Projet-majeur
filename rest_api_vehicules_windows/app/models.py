@@ -18,6 +18,7 @@ class Vehicules(db.Model):
     produit = db.Column(db.Float, index=True)
     carburant = db.Column(db.Float, index=True)
     caserne = db.Column(db.Integer, index=True)
+    disponibilite = db.Column(db.Integer, index = True)
     
     def __repr__(self):
         return '<Vehicules {}>'.format(self.position_x)  
