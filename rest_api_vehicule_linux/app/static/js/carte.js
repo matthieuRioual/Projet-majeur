@@ -48,7 +48,7 @@ function fct_tracer_circle(coord_x, coord_y, intensite, categorie){
 
 }
 
-function fct_tracer_sonde(coord_x, coord_y, type){
+function fct_tracer_sonde(coord_x, coord_y, type, alarme){
     var circle = L.circle([coord_x, coord_y], {
         color: 'green',
         fillOpacity: 1,
@@ -61,7 +61,12 @@ function fct_tracer_sonde(coord_x, coord_y, type){
     label.bindTooltip(type, {permanent: false, offset: [0, 0] });
     label.addTo(maCarte);
     list_marker.push(label);
-
+    if (alarme == 1){
+        var label_alarme = new L.marker([coord_x, coord_y], { opacity: 1});
+        label_alarme.bindTooltip("alarme!", {permanent: true, offset: [0, 0], color : 'red' });
+        label_alarme.addTo(maCarte);
+        list_marker.push(label_alarme);
+    }
 }
 
 
@@ -159,6 +164,7 @@ function fct_affichage_vehicules(){
         type : 'GET',
         dataType : 'json',
         success : function(vehicules_json, statut){  
+            console.log(vehicules_json);
             var nb_vehicules = Object.keys(vehicules_json).length; 
             console.log(nb_vehicules + " vehicules");
             for(var num_vehicule = 0; num_vehicule<nb_vehicules; num_vehicule++){
@@ -175,10 +181,15 @@ function fct_affichage_vehicules(){
                     url : 'http://localhost:5001/rest_api/v1.0/caserne/infos/' + id_caserne,
                     type : 'GET',
                     dataType : 'json',
+                    async: false,
                     success : function(caserne_json, statut){ 
                         let coord_x_caserne=caserne_json[0]['position_x'];
                         let coord_y_caserne=caserne_json[0]['position_y'];
-                        if (!(coord_x == coord_x_caserne && coord_y == coord_y_caserne)){
+                        if (coord_x == coord_x_caserne & coord_y == coord_y_caserne){
+                            console.log("le vehicule est dans la caserne");
+                        }
+                        else{
+                            console.log("le vehicule n est pas dans la caserne");
                             fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, produit, carburant);
                         }
                     }
@@ -207,7 +218,8 @@ function fct_affichage_sondes(){
                 var coord_x=sonde['position_x'];
                 var coord_y=sonde['position_y'];
                 var type=sonde['type'];
-                fct_tracer_sonde(coord_x, coord_y,type); 
+                var alarme = sonde['alarme'];
+                fct_tracer_sonde(coord_x, coord_y,type, alarme); 
             }
         },
 

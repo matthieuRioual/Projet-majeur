@@ -247,7 +247,7 @@ def creer_sonde():
         db.session.commit()
     return('Votre sonde est ajoutée !')
 
-@app.route('/rest_api/v1.0/sonde/supprimer/<int:sonde_id>', methods=['POST', 'DELETE','PUT']) # supprime une sonde
+@app.route('/rest_api/v1.0/sonde/suppression/<int:sonde_id>', methods=['POST', 'DELETE','PUT']) # supprime une sonde
 def suppression_sonde(sonde_id):
     if request.method == 'DELETE':
         sondes = Sonde.query.all()

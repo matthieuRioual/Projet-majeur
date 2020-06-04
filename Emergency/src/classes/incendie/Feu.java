@@ -72,8 +72,8 @@ public class Feu implements ideable {
 			}
 	}
 	
-	public boolean isprisenecharge() {
-		return this.prise_en_charge==0;
+	public int getprisenecharge() {
+		return this.prise_en_charge;
 	}
 	
 	public void setPrisencharge(int pec) {

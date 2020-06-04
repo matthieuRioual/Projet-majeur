@@ -47,6 +47,10 @@ public class Vehicule implements ideable{
 		this.disponibilite=0;
 	}
 
+	public Vehicule() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getId() {
 		return id;
 	}

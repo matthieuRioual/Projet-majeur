@@ -7,7 +7,9 @@ import java.util.List;
 
 import classes.incendie.Feu;
 
+import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpContent;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
@@ -66,6 +68,22 @@ public class Client_feu extends Client{
 		}
 	return listfeu;
 
+	}
+
+
+	public void pris_en_charge(int id_feu,int id_vehicule) {
+		
+		try {
+			String requestBody="{ \"prise_en_charge\": \"" + id_vehicule + "\" }"; 
+			HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
+			request = requestFactory.buildPutRequest(new GenericUrl(url+"/prendre_en_charge/"+String.valueOf(id_feu)),byteContent);
+			request.execute();
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	
