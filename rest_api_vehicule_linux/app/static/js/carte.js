@@ -1,5 +1,4 @@
 list_marker = [];
-list_caserne = [];
 
 var maCarte = L.map('maCarte').setView([45.75, 4.85], 14);
 
@@ -98,33 +97,30 @@ function fct_tracer_caserne(id_caserne,coord_x, coord_y){
         color: 'grey'});
     maCarte.addLayer(rectangle);
     list_marker.push(rectangle);
-    if (!(id_caserne in list_caserne)){
-        list_caserne.push(id_caserne);
-        $.ajax({
-            url : 'http://localhost:5001/rest_api/v1.0/caserne/afficher_vehicules/' + id_caserne,
-            type : 'GET',
-            dataType : 'json',
-            success : function(vehicules_de_la_caserne_json, statut){ 
-                var nb_vehicules = Object.keys(vehicules_de_la_caserne_json).length; 
-                var nb_vehicules_dans_caserne = 0;
-                for(var num_vehicule = 0; num_vehicule<nb_vehicules; num_vehicule++){
-                    var vehicule = vehicules_de_la_caserne_json[num_vehicule];
-                    var affectation = vehicule['disponibilite'];
-                    if(affectation==0){
-                        nb_vehicules_dans_caserne+=1;
-                    }
+    $.ajax({
+        url : 'http://localhost:5001/rest_api/v1.0/caserne/afficher_vehicules/' + id_caserne,
+        type : 'GET',
+        dataType : 'json',
+        success : function(vehicules_de_la_caserne_json, statut){ 
+            var nb_vehicules = Object.keys(vehicules_de_la_caserne_json).length; 
+            var nb_vehicules_dans_caserne = 0;
+            for(var num_vehicule = 0; num_vehicule<nb_vehicules; num_vehicule++){
+                var vehicule = vehicules_de_la_caserne_json[num_vehicule];
+                var affectation = vehicule['disponibilite'];
+                if(affectation==0){
+                    nb_vehicules_dans_caserne+=1;
                 }
-                var label = new L.marker([coord_x, coord_y], { opacity: 0.5});
-                var post_it = 'nombre de vehicules : ' + nb_vehicules_dans_caserne ;
-                label.bindTooltip(post_it, {permanent: false, offset: [0, 0] });
-                label.addTo(maCarte); 
-            },
+            }
+            var label = new L.marker([coord_x, coord_y], { opacity: 0.5});
+            var post_it = 'nombre de vehicules : ' + nb_vehicules_dans_caserne ;
+            label.bindTooltip(post_it, {permanent: false, offset: [0, 0] });
+            label.addTo(maCarte); 
+        },
 
-            error : function(resultat, statut, erreur){
-                console.log(erreur);   
-            },
-        });
-    }
+        error : function(resultat, statut, erreur){
+            console.log(erreur);   
+        },
+    });
     
 }
 
