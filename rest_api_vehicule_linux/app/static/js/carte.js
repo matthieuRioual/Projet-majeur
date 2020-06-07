@@ -12,27 +12,36 @@ accessToken: 'pk.eyJ1IjoiYWxpY2Vhc2kiLCJhIjoiY2s5MDkwZ3k1MDMwMDNscnI4dG50YmQwNCJ
 
 function fct_intensite_color(intensite){
     var fire_color;
+    var url;
     if (intensite==1){
-	    fire_color='yellow';
+        fire_color='yellow';
+        url='img/marker-icon-gold.png';
     }
     else if (intensite==2){
-	    fire_color='orange';
+        fire_color='orange';
+        url='img/marker-icon-orange.png';
     }
     else if (intensite==3){
-	    fire_color='red';
+        fire_color='red';
+        url='img/marker-icon-red.png';
     }
     else if (intensite==4){
-	    fire_color='purple';
+        fire_color='purple';
+        url='img/marker-icon-violet.png';
     }
     else {
         fire_color='black';
+        url='img/marker-icon-black.png';
     }
-    return fire_color;
+    return { fct_fire_color: fire_color,
+            fct_url: url
+    };
 }
 
 
 function fct_tracer_circle(coord_x, coord_y, intensite, categorie){
-    var fire_color=fct_intensite_color(intensite);
+    var fire_color=fct_intensite_color(intensite).fct_fire_color;
+    var url=fct_intensite_color(intensite).fct_url;
     var circle = L.circle([coord_x, coord_y], {
         color: fire_color,
         fillOpacity: 1,
@@ -41,8 +50,14 @@ function fct_tracer_circle(coord_x, coord_y, intensite, categorie){
     maCarte.addLayer(circle);
     list_marker.push(circle);
 
-    var label = new L.marker([coord_x, coord_y], { opacity: 0.5});
-    label.bindTooltip(categorie, {permanent: false, offset: [0, 0] });
+    var coloricon = new L.Icon({
+        iconUrl: url,
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34]
+      });
+
+    var label = new L.marker([coord_x, coord_y], {icon: coloricon});
+    label.bindTooltip(categorie, {permanent: false });
     label.addTo(maCarte);
     list_marker.push(label);
 
@@ -56,15 +71,12 @@ function fct_tracer_sonde(coord_x, coord_y, type, alarme){
     })
     maCarte.addLayer(circle);
     list_marker.push(circle);
-
-    var label = new L.marker([coord_x, coord_y], { opacity: 0.5});
-    label.bindTooltip(type, {permanent: false, offset: [0, 0] });
-    label.addTo(maCarte);
+  
+    var label = circle.bindPopup(type);
     list_marker.push(label);
+
     if (alarme == 1){
-        var label_alarme = new L.marker([coord_x, coord_y], { opacity: 1});
-        label_alarme.bindTooltip("alarme!", {permanent: true, offset: [0, 0], color : 'red' });
-        label_alarme.addTo(maCarte);
+        var label_alarme = circle.bindPopup("alarme!").openPopup();
         list_marker.push(label_alarme);
     }
 }
@@ -142,10 +154,10 @@ function fct_affichage_feux(){
             
             for(var num_incendie = 0; num_incendie<nb_incendies; num_incendie++){
                 feu=incendies_json[num_incendie];
-                var coord_x=feu['position_x'];
-                var coord_y=feu['position_y'];
-                var intensite=feu['intensite'];
-                var categorie=feu['categorie'];
+                var coord_x=45.754;
+                var coord_y=4.852;
+                var intensite=5;
+                var categorie="A";
                 fct_tracer_circle(coord_x, coord_y, intensite, categorie); 
             }
         },
@@ -215,10 +227,10 @@ function fct_affichage_sondes(){
             
             for(var num_sonde = 0; num_sonde<nb_sondes; num_sonde++){
                 sonde=sondes_json[num_sonde];
-                var coord_x=sonde['position_x'];
-                var coord_y=sonde['position_y'];
-                var type=sonde['type'];
-                var alarme = sonde['alarme'];
+                var coord_x=45.75;
+                var coord_y=4.85;
+                var type="CO2";
+                var alarme = 1;
                 fct_tracer_sonde(coord_x, coord_y,type, alarme); 
             }
         },
