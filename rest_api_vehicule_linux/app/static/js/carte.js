@@ -154,10 +154,10 @@ function fct_affichage_feux(){
             
             for(var num_incendie = 0; num_incendie<nb_incendies; num_incendie++){
                 feu=incendies_json[num_incendie];
-                var coord_x=45.754;
-                var coord_y=4.852;
-                var intensite=5;
-                var categorie="A";
+                var coord_x=feu['position_x'];
+                var coord_y=feu['position_y'];
+                var intensite=feu['intensite'];
+                var categorie=feu['categorie'];
                 fct_tracer_circle(coord_x, coord_y, intensite, categorie); 
             }
         },
@@ -227,10 +227,10 @@ function fct_affichage_sondes(){
             
             for(var num_sonde = 0; num_sonde<nb_sondes; num_sonde++){
                 sonde=sondes_json[num_sonde];
-                var coord_x=45.75;
-                var coord_y=4.85;
-                var type="CO2";
-                var alarme = 1;
+                var coord_x=sonde['position_x'];
+                var coord_y=sonde['position_y'];
+                var type=sonde['type'];
+                var alarme = sonde['alarme'];
                 fct_tracer_sonde(coord_x, coord_y,type, alarme); 
             }
         },
