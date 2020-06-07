@@ -52,6 +52,7 @@ public class Client_feu extends Client{
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public List<Feu> getincendiesdetecte() {
 		List<Feu> listfeu=new ArrayList<Feu>();
 		request:try {
@@ -78,8 +79,7 @@ public class Client_feu extends Client{
 			HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
 			request = requestFactory.buildPutRequest(new GenericUrl(url+"/prendre_en_charge/"+String.valueOf(id_feu)),byteContent);
 			request.execute();
-
-
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

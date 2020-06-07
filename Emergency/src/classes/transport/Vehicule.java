@@ -3,6 +3,7 @@ package classes.transport;
 import com.google.gson.annotations.SerializedName;
 
 import classes.ideable;
+import classes.Fire_type;
 
 public class Vehicule implements ideable{
 
@@ -19,7 +20,7 @@ public class Vehicule implements ideable{
 	private String type_vehicule;
 	
 	@SerializedName("type_produit")
-	private String type_produit;
+	private Fire_type type_produit;
 	
 	@SerializedName("produit")
 	private double produit;
@@ -33,14 +34,14 @@ public class Vehicule implements ideable{
 	@SerializedName("disponibilite")
 	private int disponibilite;
 	
-	public Vehicule(double position_x, double position_y,int id_caserne) {
+	public Vehicule(Fire_type fire_type,double position_x, double position_y,int id_caserne) {
 		super();
 		this.id = Vehicule.max_id;
 		Vehicule.max_id++;
 		this.position_x = position_x;
 		this.position_y = position_y;
-		this.type_vehicule=new String("temporaire");
-		this.type_produit=new String ("temporaire2");
+		this.type_vehicule="temporaire";
+		this.type_produit = fire_type;
 		this.produit=0;	
 		this.carburant = 100;
 		this.caserne=id_caserne;
@@ -84,9 +85,33 @@ public class Vehicule implements ideable{
 	}
 
 	public boolean isdisponible() {
-		if(this.disponibilite==0)
+		if(this.getDisponibilite()==0)
 			return true;
 		return false;
+	}
+
+	public int getDisponibilite() {
+		return disponibilite;
+	}
+
+	public void setDisponibilite(int disponibilite) {
+		this.disponibilite = disponibilite;
+	}
+
+	public String getType_vehicule() {
+		return type_vehicule;
+	}
+
+	public void setType_vehicule(String type_vehicule) {
+		this.type_vehicule = type_vehicule;
+	}
+
+	public Fire_type getType_produit() {
+		return type_produit;
+	}
+
+	public void setType_produit(Fire_type type_produit) {
+		this.type_produit = type_produit;
 	}
 	
 	

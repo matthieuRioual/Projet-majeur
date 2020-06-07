@@ -135,25 +135,37 @@ public class Client_vehicule extends Client {
 	}
 
 	public void move(Vehicule vehicule,Feu feu) {
-		double pas=1*Math.pow(10, -5);
+		double pas_x=1*Math.pow(10, -3);
+		double pas_y=1*Math.pow(10, -3);
 		double position_x_vehicule=vehicule.getPosition_x();
 		double position_y_vehicule=vehicule.getPosition_y();
 
 		double position_x_feu=feu.getPosx();
 		double position_y_feu=feu.getPosy();
-		if(position_x)
-
+		if((position_x_feu<position_x_vehicule) && (Math.abs(position_x_vehicule-position_x_feu)>pas_y))
+			pas_x=-1*Math.pow(10, -3);
+		else if((position_x_feu>position_x_vehicule) && (Math.abs(position_x_vehicule-position_x_feu)>pas_y))
+			pas_x=1*Math.pow(10, -3);
+		else
+			pas_x=0;
+		if((position_y_feu<position_y_vehicule) && (Math.abs(position_y_vehicule-position_y_feu)>pas_y))
+			pas_y=-1*Math.pow(10, -3);
+		else if((position_y_feu>position_y_vehicule) && (Math.abs(position_y_vehicule-position_y_feu)>pas_y))
+			pas_y=1*Math.pow(10, -3);
+		else
+			pas_y=0;
 		try {
-		String requestBody="{ \"position_x\": \"" + position_x + "\", \"position_y\": \"" + position_y + "\", \"carburant\":\"" + carburant + "\",\"disponibilite\":\""+disponibilite+"\"}"; 
-		HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
-		request = requestFactory.buildPutRequest(new GenericUrl(url+"/mise_a_jour_position/"+String.valueOf(id)),byteContent);
-		request.execute();
-		}	
-		catch (IOException e) {
-		e.printStackTrace();
-		}
+			String requestBody="{ \"position_x\": \"" + (position_x_vehicule+pas_x) + "\", \"position_y\": \"" + (position_y_vehicule+pas_y) + "\", \"carburant\":\"" + (vehicule.getCarburant()-1) + "\",\"disponibilite\":\""+vehicule.getDisponibilite()+"\"}"; 
+			HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
+			request = requestFactory.buildPutRequest(new GenericUrl(url+"/mise_a_jour_position/"+String.valueOf(vehicule.getId())),byteContent);
+			request.execute();
+			}	
+			catch (IOException e) {
+			e.printStackTrace();
+			}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Vehicule> getvehiculebyID(int getprisencharge) {
 		List<Vehicule> listvehicule=new ArrayList<Vehicule>();
 		request:try {
@@ -170,6 +182,21 @@ public class Client_vehicule extends Client {
 		}
 	return listvehicule;
 	}
+	
+	public void pris_en_charge(int id_feu,int id_vehicule) {
+		try {
+			String requestBody="{ \"disponibilite\": \"" + id_feu + "\" }"; 
+		HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
+		request = requestFactory.buildPutRequest(new GenericUrl(url+"/mise_a_jour_position/"+String.valueOf(id_vehicule)),byteContent);
+		request.execute();
+		}
+		catch (IOException e) {
+		e.printStackTrace();
+		}
+		
+		
+	}
+
 	
 }
 

@@ -15,9 +15,6 @@ import classes.transport.Vehicule;
 public class Monde {
 	
 	private List<Caserne> listcaserne;
-	private List<Feu> listfeu;
-	private List<Vehicule> listvehicule;
-	private List<Personnel> listpersonnel;
 	
 	Client_caserne com_caserne=new Client_caserne();
 	Client_feu com_feu = new Client_feu();
@@ -31,18 +28,7 @@ public class Monde {
 		if(listcaserne.isEmpty())
 			Caserne.max_id=0;
 		else 
-			Caserne.max_id=this.listcaserne.get(listcaserne.size()-1).getId();
-		 
-}
-
-
-	public void setlistfeu(List<Feu> getincendies) {
-		this.listfeu=getincendies;
-		
-	}
-	
-	public List<Feu> getListFeu() {
-		return this.listfeu;
+			Caserne.max_id=this.listcaserne.get(listcaserne.size()-1).getId(); 
 	}
 
 	public void ajoutCaserne(double position_x,double position_y,int personnel_ini,int vehicule_ini) {
@@ -50,32 +36,34 @@ public class Monde {
 		com_caserne.Ajout(c);
 	}
 	
-	public List<Caserne> getListCaserne(){
-		return this.listcaserne;
-	}
-	
 	public void turn() {
 		List<Vehicule> listvehiculedisponible=com_vehicule.getvehiculesdisponibles();
-		List<Vehicule> listvehiculenondisponible=com_vehicule.getvehiculesnondisponibles();
+		//List<Vehicule> listvehiculenondisponible=com_vehicule.getvehiculesnondisponibles();
 		List<Feu> listfeu=com_feu.getincendiesdetecte();
 		for(Feu f:listfeu) {
-			double distance=10;
-			int vehicule_pointeur=0;
-			int boucle_pointeur=0;
 			if(f.getprisenecharge()==0) {
+				double distance=10;
+				int vehicule_pointeur=0;
+				int boucle_pointeur=1;
 				for(Vehicule v_d:listvehiculedisponible) {
-					vehicule_pointeur=(get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y())<distance)?boucle_pointeur:vehicule_pointeur;
+					if(v_d.getType_produit().equals(f.getType())) {
+						vehicule_pointeur=(get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y())<distance)? boucle_pointeur:vehicule_pointeur;
+						distance=(get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y())<distance)? get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y()):distance;
+					}
 					boucle_pointeur++;
 				}
-			com_feu.pris_en_charge(f.getId(),listvehiculedisponible.get(vehicule_pointeur).getId());
-			System.out.println("C'est le camion "+listvehiculedisponible.get(vehicule_pointeur).getId()+" qui va s'occuper du feu "+f.getId());
-			//com_vehicule.move(listvehiculedisponible.get(vehicule_pointeur).getId(),f.getPosx(),f.getPosy(),listvehiculedisponible.get(vehicule_pointeur).getCarburant(),f.getId());
+				if(vehicule_pointeur!=0) {
+					com_feu.pris_en_charge(f.getId(),listvehiculedisponible.get(vehicule_pointeur-1).getId());
+					com_vehicule.pris_en_charge(f.getId(), listvehiculedisponible.get(vehicule_pointeur-1).getId());
+					System.out.println("C'est le camion "+listvehiculedisponible.get(vehicule_pointeur-1).getId()+" qui va s'occuper du feu "+f.getId());
+					listvehiculedisponible.remove(vehicule_pointeur-1);
+				}
+				else
+					System.out.println("Aucun camion n'est disponible pour intervenir sur le feu numéro "+f.getId());
 			}
 			else {
-				System.out.println("c est ici");
 				List<Vehicule> vehicule_intervention=com_vehicule.getvehiculebyID(f.getprisenecharge());
 				com_vehicule.move(vehicule_intervention.get(0),f);
-				
 			}
 		}
 	}

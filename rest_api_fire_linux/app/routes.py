@@ -136,22 +136,24 @@ def detecter_par_sonde(sonde_id):
             if s["etat"] == 5 :
                 rayon = 0.005
             alarme = s["alarme"]
-        
+
+        retour = ''
         incendies = Incendies.query.all()
         if alarme == 1:
             url2 = 'http://localhost:5001/rest_api/v1.0/sonde/modifier_alarme/' + str(sonde_id)
             rb = 0
-            rb = requests.get(url2).text()
+            rb = requests.get(url2)
         for i in incendies :
             if(calcul_distance(i.position_x, i.position_y, x, y) <= rayon):
                 i.detecte = sonde_id
                 db.session.commit()
+                retour = 'Detection effectuée'
                 if alarme == 0:
                     url2 = 'http://localhost:5001/rest_api/v1.0/sonde/modifier_alarme/' + str(sonde_id)
                     r = 0
-                    r = requests.get(url2).text()
+                    r = requests.get(url2)
 
-        return('Detection_effectuée !')
+        return(retour)
 
 
 def calcul_distance(x1,y1,x2,y2):

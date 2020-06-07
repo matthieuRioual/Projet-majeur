@@ -62,6 +62,9 @@ function fct_tracer_sonde(coord_x, coord_y, type, alarme){
     label.addTo(maCarte);
     list_marker.push(label);
     if (alarme == 1){
+        /*label_alarme = addPopups(coord_x, coord_y, "alarme",
+            options = popupOptions(closeButton = FALSE,permanent = TRUE)
+          );*/
         var label_alarme = new L.marker([coord_x, coord_y], { opacity: 1});
         label_alarme.bindTooltip("alarme!", {permanent: true, offset: [0, 0], color : 'red' });
         label_alarme.addTo(maCarte);

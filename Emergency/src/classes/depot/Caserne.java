@@ -8,7 +8,7 @@ import com.Client_vehicule;
 import com.google.gson.annotations.SerializedName;
 
 import classes.ideable;
-import classes.humain.Fire_type;
+import classes.Fire_type;
 import classes.humain.Personnel;
 import classes.transport.Vehicule;
 
@@ -42,10 +42,18 @@ public class Caserne implements ideable{
 	}
 
 	private void caserne_init() {
-		for(int k = 0;k<this.personnel_ini;k++) {
-			Vehicule vehicule=new Vehicule(this.getPosition_x(),this.getPosition_y(),this.getId());
+		//for(int k = 0;k<this.personnel_ini;k++) {
+			//Random generator = new Random();
+	    	//int number=generator.nextInt(6);
+			Vehicule vehicule=new Vehicule(Fire_type.A,this.getPosition_x(),this.getPosition_y(),this.getId());
+			Vehicule vehicule2=new Vehicule(Fire_type.B,this.getPosition_x(),this.getPosition_y(),this.getId());
+			Vehicule vehicule3=new Vehicule(Fire_type.C,this.getPosition_x(),this.getPosition_y(),this.getId());
 			this.com_vehicule.Ajout(vehicule);
-		}
+			this.com_vehicule.Ajout(vehicule2);
+			this.com_vehicule.Ajout(vehicule3);
+
+			
+		//}
 
 		for(int k = 0;k<this.vehicule_ini;k++) {
 			Random generator = new Random();

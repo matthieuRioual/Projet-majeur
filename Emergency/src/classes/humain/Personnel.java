@@ -1,6 +1,7 @@
 package classes.humain;
 
 import com.google.gson.annotations.SerializedName;
+import classes.Fire_type;
 
 import classes.ideable;
 

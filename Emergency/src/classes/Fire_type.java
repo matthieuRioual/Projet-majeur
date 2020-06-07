@@ -1,4 +1,4 @@
-package classes.humain;
+package classes;
 
 public enum Fire_type {
 	A,B,C,D,E,F;
