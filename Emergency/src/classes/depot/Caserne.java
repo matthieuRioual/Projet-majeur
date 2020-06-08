@@ -9,11 +9,12 @@ import com.google.gson.annotations.SerializedName;
 
 import classes.ideable;
 import classes.Fire_type;
+import classes.Target;
 import classes.humain.Personnel;
 import classes.transport.Vehicule;
 
 
-public class Caserne implements ideable{
+public class Caserne implements ideable,Target{
 
 	public static int max_id;
 	private int id;
@@ -41,16 +42,15 @@ public class Caserne implements ideable{
 		caserne_init();
 	}
 
+	public Caserne() {
+		super();
+	}
+
 	private void caserne_init() {
-		//for(int k = 0;k<this.personnel_ini;k++) {
-			//Random generator = new Random();
-	    	//int number=generator.nextInt(6);
-			Vehicule vehicule=new Vehicule(Fire_type.A,this.getPosition_x(),this.getPosition_y(),this.getId());
-			Vehicule vehicule2=new Vehicule(Fire_type.B,this.getPosition_x(),this.getPosition_y(),this.getId());
-			Vehicule vehicule3=new Vehicule(Fire_type.C,this.getPosition_x(),this.getPosition_y(),this.getId());
+		for(Fire_type ft:Fire_type.values()) {
+			Vehicule vehicule=new Vehicule(ft,this.getPosx(),this.getPosy(),this.getId());
 			this.com_vehicule.Ajout(vehicule);
-			this.com_vehicule.Ajout(vehicule2);
-			this.com_vehicule.Ajout(vehicule3);
+		}
 
 			
 		//}
@@ -72,7 +72,7 @@ public class Caserne implements ideable{
 		this.id=id;
 	}
 	
-	public double getPosition_x() {
+	public double getPosx() {
 		return position_x;
 	}
 
@@ -80,7 +80,7 @@ public class Caserne implements ideable{
 		this.position_x = position_x;
 	}
 
-	public double getPosition_y() {
+	public double getPosy() {
 		return position_y;
 	}
 

@@ -2,11 +2,10 @@ package classes.incendie;
 
 import com.google.gson.annotations.SerializedName;
 import classes.Fire_type;
-
-
+import classes.Target;
 import classes.ideable;
 
-public class Feu implements ideable {
+public class Feu implements ideable,Target {
 	
 	static int max_id;
 	private int id;

@@ -72,9 +72,24 @@ public class Client_caserne extends Client{
 			e.printStackTrace();
 		}
 	return listpersonnelofcaserne;
-	}
-	
-	
+	}	
 
+
+	@SuppressWarnings("unchecked")
+	public List<Caserne> getcasernebyID(int id_caserne) {
+		List<Caserne> caserne=new ArrayList<Caserne>();
+		request:try {
+			request = requestFactory.buildGetRequest(new GenericUrl(getUrl()+"/infos/"+String.valueOf(id_caserne)));
+			String response = request.execute().parseAsString();
+			if(response.isEmpty()) {
+				break request;
+			}				
+			Type collectionType = new TypeToken<List<Caserne>>(){}.getType();
+			caserne = (List<Caserne>) new Gson().fromJson( response ,collectionType);
+			} catch (IOException e) {
+			e.printStackTrace();
+		}
+	return caserne;
+		}
 	
 }

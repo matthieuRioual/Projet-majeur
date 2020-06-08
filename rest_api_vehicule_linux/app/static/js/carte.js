@@ -136,6 +136,7 @@ function fct_destroy_markers(){
         maCarte.removeLayer(marker);
     }
     list_marker = [];
+    list_caserne = [];
 }
 
 function fct_affichage_feux(){
@@ -276,7 +277,7 @@ function fct_affichage_carte(){
     fct_affichage_sondes();
     fct_affichage_casernes();
 
-    setTimeout(fct_affichage_carte,8000)
+    setTimeout(fct_affichage_carte,4000)
 }
 
 fct_affichage_carte()

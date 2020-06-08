@@ -44,7 +44,7 @@ public class Vehicule implements ideable{
 		this.type_produit = fire_type;
 		this.produit=0;	
 		this.carburant = 100;
-		this.caserne=id_caserne;
+		this.setCaserne(id_caserne);
 		this.disponibilite=0;
 	}
 
@@ -112,6 +112,14 @@ public class Vehicule implements ideable{
 
 	public void setType_produit(Fire_type type_produit) {
 		this.type_produit = type_produit;
+	}
+
+	public int getCaserne() {
+		return caserne;
+	}
+
+	public void setCaserne(int caserne) {
+		this.caserne = caserne;
 	}
 	
 	

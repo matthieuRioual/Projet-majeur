@@ -18,7 +18,7 @@ public class simulateur_vehicule_sonde {
 		m2.ajoutCaserne(45.75, 4.85, 3, 2);
 		while(true) {
 			m2.turn();
-			TimeUnit.SECONDS.sleep(5);
+			TimeUnit.SECONDS.sleep(1);
 
 		}	
 	}

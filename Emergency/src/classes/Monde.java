@@ -40,6 +40,7 @@ public class Monde {
 		List<Vehicule> listvehiculedisponible=com_vehicule.getvehiculesdisponibles();
 		//List<Vehicule> listvehiculenondisponible=com_vehicule.getvehiculesnondisponibles();
 		List<Feu> listfeu=com_feu.getincendiesdetecte();
+		double pas=1*Math.pow(10, -3);
 		for(Feu f:listfeu) {
 			if(f.getprisenecharge()==0) {
 				double distance=10;
@@ -54,7 +55,7 @@ public class Monde {
 				}
 				if(vehicule_pointeur!=0) {
 					com_feu.pris_en_charge(f.getId(),listvehiculedisponible.get(vehicule_pointeur-1).getId());
-					com_vehicule.pris_en_charge(f.getId(), listvehiculedisponible.get(vehicule_pointeur-1).getId());
+					com_vehicule.setdisponibilite(f.getId(), listvehiculedisponible.get(vehicule_pointeur-1).getId());
 					System.out.println("C'est le camion "+listvehiculedisponible.get(vehicule_pointeur-1).getId()+" qui va s'occuper du feu "+f.getId());
 					listvehiculedisponible.remove(vehicule_pointeur-1);
 				}
@@ -62,10 +63,36 @@ public class Monde {
 					System.out.println("Aucun camion n'est disponible pour intervenir sur le feu numéro "+f.getId());
 			}
 			else {
-				List<Vehicule> vehicule_intervention=com_vehicule.getvehiculebyID(f.getprisenecharge());
-				com_vehicule.move(vehicule_intervention.get(0),f);
+				Vehicule vehicule_intervention=com_vehicule.getvehiculebyID(f.getprisenecharge()).get(0);
+				if(vehicule_intervention.getDisponibilite()!=f.getprisenecharge()) {
+					com_vehicule.setdisponibilite(f.getId(), vehicule_intervention.getId());
+					vehicule_intervention.setDisponibilite(f.getId());
+				}
+
+				if(Math.abs(vehicule_intervention.getPosition_x()-f.getPosx())<pas && Math.abs(vehicule_intervention.getPosition_y()-f.getPosy())<pas) {
+					if(f.getIntensity()-1>0) {
+						String requestBody = "{ \"intensite\": \"" + (f.getIntensity()-1) + "\"}";
+						com_feu.Misajour(f,requestBody);
+						System.out.println("le feu "+f.getId()+"diminue d\'intensité");
+					}
+					else
+						com_vehicule.setdisponibilite(0, vehicule_intervention.getId());
+						vehicule_intervention.setDisponibilite(0);
+						listvehiculedisponible.add(vehicule_intervention);
+						com_feu.Supression(f.getId());
+						
+				}
+				else
+					com_vehicule.move(pas,vehicule_intervention,f);
 			}
+			
 		}
+		for(Vehicule v_nd:listvehiculedisponible) {
+				Caserne caserne_retour=com_caserne.getcasernebyID(v_nd.getCaserne()).get(0);
+				if(caserne_retour.getPosx()!=v_nd.getPosition_x() || caserne_retour.getPosx()!=v_nd.getPosition_x()) {
+					com_vehicule.move(pas, v_nd, caserne_retour);
+				}
+			}
 	}
 
 	public double get_distance(double x1,double y1,double x2,double y2) {

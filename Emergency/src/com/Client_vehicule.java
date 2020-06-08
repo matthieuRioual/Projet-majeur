@@ -11,8 +11,8 @@ import com.google.api.client.http.HttpContent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import classes.Target;
 import classes.humain.Personnel;
-import classes.incendie.Feu;
 import classes.transport.Vehicule;
 
 
@@ -134,14 +134,14 @@ public class Client_vehicule extends Client {
 	return listin;
 	}
 
-	public void move(Vehicule vehicule,Feu feu) {
-		double pas_x=1*Math.pow(10, -3);
-		double pas_y=1*Math.pow(10, -3);
+	public void move(double pas,Vehicule vehicule,Target target) {
+		double pas_x=pas;
+		double pas_y=pas;
 		double position_x_vehicule=vehicule.getPosition_x();
 		double position_y_vehicule=vehicule.getPosition_y();
 
-		double position_x_feu=feu.getPosx();
-		double position_y_feu=feu.getPosy();
+		double position_x_feu=target.getPosx();
+		double position_y_feu=target.getPosy();
 		if((position_x_feu<position_x_vehicule) && (Math.abs(position_x_vehicule-position_x_feu)>pas_y))
 			pas_x=-1*Math.pow(10, -3);
 		else if((position_x_feu>position_x_vehicule) && (Math.abs(position_x_vehicule-position_x_feu)>pas_y))
@@ -183,7 +183,7 @@ public class Client_vehicule extends Client {
 	return listvehicule;
 	}
 	
-	public void pris_en_charge(int id_feu,int id_vehicule) {
+	public void setdisponibilite(int id_feu,int id_vehicule) {
 		try {
 			String requestBody="{ \"disponibilite\": \"" + id_feu + "\" }"; 
 		HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());

@@ -69,12 +69,19 @@ def ajout_vehicule():
 @app.route('/rest_api/v1.0/vehicule/suppression/<int:vehicule_id>', methods=['GET', 'DELETE','PUT']) # Supprime un véhicule
 def suppression_vehicule(vehicule_id):
     if request.method == 'DELETE':
-        vehicules = Vehicules.query.all()
-        for i in vehicules:
-            if i.id == vehicule_id:
-                db.session.delete(i)
-                db.session.commit()
+        vehicule = Vehicules.query.get(vehicule_id)
+        db.session.delete(vehicule)
+        db.session.commit()
     return('Le véhicule est supprime !')
+
+
+@app.route('/rest_api/v1.0/vehicule/mise_a_jour/<int:vehicule_id>', methods=['GET', 'DELETE','PUT']) 
+def maj_vehicule(vehicule_id):
+    if request.method == 'PUT':
+        vehicule = Vehicules.query.get(vehicule_id)
+        vehicule.disponibilite = request.json.get('disponibilite', vehicule.disponibilite)
+        db.session.commit()
+    return('attributs du véhicule modifiés !')
 
 @app.route('/rest_api/v1.0/vehicule/mise_a_jour_position/<int:vehicule_id>', methods=['GET', 'DELETE','PUT']) # Met à jour la position du véhicule, son essence et sa disponibilite
 def maj_vehicule_position(vehicule_id):

@@ -42,8 +42,8 @@ public class Monde {
 		  }
 			
 		for(Fire feu:this.listfeu) {
-				String requestBody = "{ \"intensite\": \"" + ((int) feu.getIntensity()/12) + "\"}";
-				feu.setIntensity(feu.getIntensity()+1);
+				String requestBody = "{ \"intensite\": \"" + feu.getIntensity() + "\"}";
+				//feu.setIntensity(feu.getIntensity()+1);
 				com_feu.Misajour(feu,requestBody);
 		}
 	}
