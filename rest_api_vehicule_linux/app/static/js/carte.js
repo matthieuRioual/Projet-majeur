@@ -12,19 +12,19 @@ accessToken: 'pk.eyJ1IjoiYWxpY2Vhc2kiLCJhIjoiY2s5MDkwZ3k1MDMwMDNscnI4dG50YmQwNCJ
 function fct_intensite_color(intensite){
     var fire_color;
     var url;
-    if (intensite==1){
+    if (intensite<12){
         fire_color='yellow';
         url='img/marker-icon-gold.png';
     }
-    else if (intensite==2){
+    else if (intensite<24){
         fire_color='orange';
         url='img/marker-icon-orange.png';
     }
-    else if (intensite==3){
+    else if (intensite<36){
         fire_color='red';
         url='img/marker-icon-red.png';
     }
-    else if (intensite==4){
+    else if (intensite<48){
         fire_color='purple';
         url='img/marker-icon-violet.png';
     }

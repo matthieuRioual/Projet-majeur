@@ -12,7 +12,7 @@ public class simulateur_feu {
 		Monde monde=new Monde();
 		monde.deleteall();
 	while(true) {
-			TimeUnit.SECONDS.sleep(1);
+			TimeUnit.SECONDS.sleep(5);
 			monde.evoluate();
 		}
 		

@@ -40,16 +40,42 @@ public class Monde {
 		List<Vehicule> listvehiculedisponible=com_vehicule.getvehiculesdisponibles();
 		//List<Vehicule> listvehiculenondisponible=com_vehicule.getvehiculesnondisponibles();
 		List<Feu> listfeu=com_feu.getincendiesdetecte();
-		double pas=1*Math.pow(10, -3);
+		double distance=1*Math.pow(10, -3);
 		for(Feu f:listfeu) {
-			if(f.getprisenecharge()==0) {
-				double distance=10;
+			
+			if(f.getprisenecharge()!=0){
+				Vehicule vehicule_intervention=com_vehicule.getvehiculebyID(f.getprisenecharge()).get(0);
+				if(vehicule_intervention.getDisponibilite()!=f.getprisenecharge()) {
+					com_vehicule.setdisponibilite(f.getId(), vehicule_intervention.getId());
+					vehicule_intervention.setDisponibilite(f.getId());
+				}
+
+				if(Math.sqrt(Math.pow(f.getPosx()-vehicule_intervention.getPosition_x(),2) + Math.pow(f.getPosy()-vehicule_intervention.getPosition_y(),2))<distance) {
+					if(f.getIntensity()-1>0) {
+						String requestBody = "{ \"intensite\": \"" + (f.getIntensity()-1) + "\"}";
+						com_feu.Misajour(f,requestBody);
+						System.out.println("le feu "+f.getId()+"diminue d\'intensité");
+					}
+				
+					else {
+						com_vehicule.setdisponibilite(0, vehicule_intervention.getId());
+						vehicule_intervention.setDisponibilite(0);
+						listvehiculedisponible.add(vehicule_intervention);
+						com_feu.Supression(f.getId());
+					}
+			}
+				else {
+					com_vehicule.move(distance,vehicule_intervention,f);
+				}
+			}
+			else {
+				double ecart=10;
 				int vehicule_pointeur=0;
 				int boucle_pointeur=1;
 				for(Vehicule v_d:listvehiculedisponible) {
 					if(v_d.getType_produit().equals(f.getType())) {
-						vehicule_pointeur=(get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y())<distance)? boucle_pointeur:vehicule_pointeur;
-						distance=(get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y())<distance)? get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y()):distance;
+						vehicule_pointeur=(get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y())<ecart)? boucle_pointeur:vehicule_pointeur;
+						ecart=(get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y())<ecart)? get_distance(f.getPosx(),f.getPosy(),v_d.getPosition_x(),v_d.getPosition_y()):ecart;
 					}
 					boucle_pointeur++;
 				}
@@ -59,40 +85,18 @@ public class Monde {
 					System.out.println("C'est le camion "+listvehiculedisponible.get(vehicule_pointeur-1).getId()+" qui va s'occuper du feu "+f.getId());
 					listvehiculedisponible.remove(vehicule_pointeur-1);
 				}
-				else
-					System.out.println("Aucun camion n'est disponible pour intervenir sur le feu numéro "+f.getId());
+				//else
+					//System.out.println("Aucun camion n'est disponible pour intervenir sur le feu numéro "+f.getId());
 			}
-			else {
-				Vehicule vehicule_intervention=com_vehicule.getvehiculebyID(f.getprisenecharge()).get(0);
-				if(vehicule_intervention.getDisponibilite()!=f.getprisenecharge()) {
-					com_vehicule.setdisponibilite(f.getId(), vehicule_intervention.getId());
-					vehicule_intervention.setDisponibilite(f.getId());
-				}
-
-				if(Math.abs(vehicule_intervention.getPosition_x()-f.getPosx())<pas && Math.abs(vehicule_intervention.getPosition_y()-f.getPosy())<pas) {
-					if(f.getIntensity()-1>0) {
-						String requestBody = "{ \"intensite\": \"" + (f.getIntensity()-1) + "\"}";
-						com_feu.Misajour(f,requestBody);
-						System.out.println("le feu "+f.getId()+"diminue d\'intensité");
-					}
-					else
-						com_vehicule.setdisponibilite(0, vehicule_intervention.getId());
-						vehicule_intervention.setDisponibilite(0);
-						listvehiculedisponible.add(vehicule_intervention);
-						com_feu.Supression(f.getId());
-						
-				}
-				else
-					com_vehicule.move(pas,vehicule_intervention,f);
-			}
-			
 		}
+		
 		for(Vehicule v_nd:listvehiculedisponible) {
 				Caserne caserne_retour=com_caserne.getcasernebyID(v_nd.getCaserne()).get(0);
 				if(caserne_retour.getPosx()!=v_nd.getPosition_x() || caserne_retour.getPosx()!=v_nd.getPosition_x()) {
-					com_vehicule.move(pas, v_nd, caserne_retour);
+					com_vehicule.move(distance, v_nd, caserne_retour);
 				}
 			}
+		
 	}
 
 	public double get_distance(double x1,double y1,double x2,double y2) {

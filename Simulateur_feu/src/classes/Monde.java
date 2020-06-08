@@ -12,17 +12,18 @@ public class Monde {
 	Client_feu com_feu=new Client_feu();
 
 	
-	public List<Fire> listfeu;
+	
 	
 	public Monde() {
 		super();
-		listfeu=new ArrayList<Fire>();
+		
 				
 	}
 
 	public void evoluate() {
 		Random generator = new Random();
-		int number = generator.nextInt(3);
+		int number = generator.nextInt(10);
+		List<Fire> listfeu=com_feu.getincendies();
 		switch(number)
 	     {
 		case 0:
@@ -35,25 +36,24 @@ public class Monde {
 			Fire f=new Fire(Fire_type.values()[number],12,x,y);
 			Fire.max_id++;
 			com_feu.Ajout(f);
-			//listfeu.add(f);
 			break;	    	
 		default:
 			break;
 		  }
 			
-		for(Fire feu:this.listfeu) {
-				String requestBody = "{ \"intensite\": \"" + feu.getIntensity() + "\"}";
+		for(Fire feu:listfeu) {
+				String requestBody = "{ \"intensite\": \"" + (feu.getIntensity()+1) + "\"}";
 				//feu.setIntensity(feu.getIntensity()+1);
 				com_feu.Misajour(feu,requestBody);
 		}
 	}
 	
-	public void getincendies() {
+	/*public void getincendies() {
 		listfeu=com_feu.getincendies();
 		if(listfeu.isEmpty())
 			Fire.max_id=0;
 		Fire.max_id=this.listfeu.get(listfeu.size()-1).getId();
-	}
+	}*/
 
 	public void deleteall() {
 		com_feu.deleteall();
