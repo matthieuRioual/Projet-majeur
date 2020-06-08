@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/home/tp/eclipse-workspace/Simulateur_feu/lib/google-http-client-1.23.0.jar"/>
+	<classpathentry kind="lib" path="/home/tp/eclipse-workspace/Simulateur_feu/lib/google-http-client-jackson2-1.23.0.jar"/>
+	<classpathentry kind="lib" path="/home/tp/eclipse-workspace/Simulateur_feu/lib/gson-2.8.6.jar"/>
+	<classpathentry kind="lib" path="/home/tp/eclipse-workspace/Simulateur_feu/lib/jackson-core-2.10.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
