@@ -81,16 +81,27 @@ function fct_tracer_sonde(coord_x, coord_y, type, alarme){
 
 function fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, produit, carburant){
 
+    var circle = L.circle([coord_x, coord_y], {
+        color: 'white',
+        fillOpacity: 0,
+        radius: 35,
+        opacity: 0
+    })
+    maCarte.addLayer(circle);
+    list_marker.push(circle);
+
+    var message = "type de produit: " + type_produit + ", quantité produit: "+ produit + ", quantité carburant: " + carburant;
+    var label = circle.bindPopup(message);
+    list_marker.push(label);
+
     var imageUrl = 'https://img-31.ccm2.net/pBcO5KwJ-Fwbb5D8sZdFxpoW0Qk=/1240x/smart/d17c2a4ced4043798034c51e7b5d41fa/ccmcms-hugo/10781896.jpg',
-    imageBounds = [[coord_x - 0.0001, coord_y - 0.0001], [[coord_x + 0.0008, coord_y + 0.0008]]];
+    imageBounds = [[coord_x - 0.0003, coord_y - 0.0004], [[coord_x + 0.0003, coord_y + 0.0004]]];
 
     vehicule = L.imageOverlay(imageUrl, imageBounds);
     maCarte.addLayer(vehicule);
     list_marker.push(vehicule);
 
-    var message = "type de produit: " + type_produit + ", quantité véhicule: "+ produit + "quantité carburant: " + carburant;
-    var label = vehicule.bindPopup(message);
-    list_marker.push(label);
+
 }
 
 function fct_tracer_caserne(id_caserne,coord_x, coord_y){
@@ -187,7 +198,7 @@ function fct_affichage_vehicules(){
                 var type_produit=vehicule['type_produit'];
                 var produit=vehicule['produit'];
                 var carburant=vehicule['carburant'];
-                var id_caserne = vehicule['caserne']; 
+                var id_caserne = vehicule['caserne']; */
                 $.ajax({
                     url : 'http://localhost:5001/rest_api/v1.0/caserne/infos/' + id_caserne,
                     type : 'GET',
@@ -197,10 +208,10 @@ function fct_affichage_vehicules(){
                         let coord_x_caserne=caserne_json[0]['position_x'];
                         let coord_y_caserne=caserne_json[0]['position_y'];
                         if (coord_x == coord_x_caserne & coord_y == coord_y_caserne){
-                            console.log("le vehicule est dans la caserne");
+                            //console.log("le vehicule est dans la caserne");
                         }
                         else{
-                            console.log("le vehicule n est pas dans la caserne");
+                            //console.log("le vehicule n est pas dans la caserne");
                             fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, produit, carburant);
                         }
                     }
