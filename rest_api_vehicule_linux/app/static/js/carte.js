@@ -198,7 +198,7 @@ function fct_affichage_vehicules(){
                 var type_produit=vehicule['type_produit'];
                 var produit=vehicule['produit'];
                 var carburant=vehicule['carburant'];
-                var id_caserne = vehicule['caserne']; */
+                var id_caserne = vehicule['caserne'];
                 $.ajax({
                     url : 'http://localhost:5001/rest_api/v1.0/caserne/infos/' + id_caserne,
                     type : 'GET',
