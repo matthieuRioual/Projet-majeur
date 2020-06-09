@@ -23,7 +23,7 @@ public class Vehicule implements ideable{
 	private Fire_type type_produit;
 	
 	@SerializedName("produit")
-	private double produit;
+	private int produit;
 	
 	@SerializedName("carburant")
 	private int carburant;
@@ -42,7 +42,7 @@ public class Vehicule implements ideable{
 		this.position_y = position_y;
 		this.type_vehicule="temporaire";
 		this.type_produit = fire_type;
-		this.produit=0;	
+		this.produit = 100;	
 		this.carburant = 100;
 		this.setCaserne(id_caserne);
 		this.disponibilite=0;
@@ -120,6 +120,14 @@ public class Vehicule implements ideable{
 
 	public void setCaserne(int caserne) {
 		this.caserne = caserne;
+	}
+
+	public int getProduit() {
+		return produit;
+	}
+
+	public void setProduit(int produit) {
+		this.produit = produit;
 	}
 	
 	

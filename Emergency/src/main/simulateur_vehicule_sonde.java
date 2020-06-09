@@ -15,7 +15,8 @@ public class simulateur_vehicule_sonde {
 		Monde m=new Monde();
 		m.tout_supprimer();
 		Monde m2=new Monde();
-		m2.ajoutCaserne(45.75, 4.85, 3, 2);
+		m2.ajoutCaserne(45.75, 4.83, 3, 2);
+		m2.ajoutCaserne(45.75, 4.87, 3, 2);
 		while(true) {
 			m2.turn();
 			TimeUnit.SECONDS.sleep(1);

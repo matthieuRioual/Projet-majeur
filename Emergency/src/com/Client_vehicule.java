@@ -11,6 +11,7 @@ import com.google.api.client.http.HttpContent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import classes.Fire_type;
 import classes.Target;
 import classes.humain.Personnel;
 import classes.transport.Vehicule;
@@ -33,8 +34,8 @@ public class Client_vehicule extends Client {
 		}
 	}
 	
-	public void change_produit(int id,int produit) {
-		String requestBody = "{ \"carburant\": \"" + (produit) + "\"}";
+	public void change_produit(int id,int produit, Fire_type type_produit) {
+		String requestBody = "{ \"produit\": \"" + (produit) + "\", \"type_produit\": \"" + (type_produit) + "\"}";
 		HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
 		try {
 			request = requestFactory.buildPutRequest(new GenericUrl(getUrl()+"/remplir_produit/"+String.valueOf(id)),byteContent);
@@ -134,28 +135,14 @@ public class Client_vehicule extends Client {
 	return listin;
 	}
 
-	public void move(double pas,Vehicule vehicule,Target target) {
-		double pas_x=pas;
-		double pas_y=pas;
-		double position_x_vehicule=vehicule.getPosition_x();
-		double position_y_vehicule=vehicule.getPosition_y();
-
-		double position_x_feu=target.getPosx();
-		double position_y_feu=target.getPosy();
-		if((position_x_feu<position_x_vehicule) && (Math.abs(position_x_vehicule-position_x_feu)>pas_y))
-			pas_x=-1*Math.pow(10, -3);
-		else if((position_x_feu>position_x_vehicule) && (Math.abs(position_x_vehicule-position_x_feu)>pas_y))
-			pas_x=1*Math.pow(10, -3);
-		else
-			pas_x=0;
-		if((position_y_feu<position_y_vehicule) && (Math.abs(position_y_vehicule-position_y_feu)>pas_y))
-			pas_y=-1*Math.pow(10, -3);
-		else if((position_y_feu>position_y_vehicule) && (Math.abs(position_y_vehicule-position_y_feu)>pas_y))
-			pas_y=1*Math.pow(10, -3);
-		else
-			pas_y=0;
+	public void move(double distance,Vehicule vehicule,Target target) {
+		double alpha=Math.atan( Math.abs((target.getPosy()-vehicule.getPosition_y())) / Math.abs((target.getPosx()-vehicule.getPosition_x())) );
+        double sign_x=target.getPosx()>vehicule.getPosition_x()?1:-1;
+        double sign_y=target.getPosy()>vehicule.getPosition_y()?1:-1;
+        double pas_x=Math.cos(alpha)*distance*sign_x;
+        double pas_y=Math.sin(alpha)*distance*sign_y;
 		try {
-			String requestBody="{ \"position_x\": \"" + (position_x_vehicule+pas_x) + "\", \"position_y\": \"" + (position_y_vehicule+pas_y) + "\", \"carburant\":\"" + (vehicule.getCarburant()-1) + "\",\"disponibilite\":\""+vehicule.getDisponibilite()+"\"}"; 
+			String requestBody="{ \"position_x\": \"" + (vehicule.getPosition_x()+pas_x) + "\", \"position_y\": \"" + (vehicule.getPosition_y()+pas_y) + "\", \"carburant\":\"" + (vehicule.getCarburant()-1) + "\",\"disponibilite\":\""+vehicule.getDisponibilite()+"\"}"; 
 			HttpContent byteContent = new ByteArrayContent("application/json",requestBody.getBytes());
 			request = requestFactory.buildPutRequest(new GenericUrl(url+"/mise_a_jour_position/"+String.valueOf(vehicule.getId())),byteContent);
 			request.execute();

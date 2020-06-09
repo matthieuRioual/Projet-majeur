@@ -6,6 +6,8 @@ import com.Client_caserne;
 import com.Client_feu;
 import com.Client_personnel;
 import com.Client_vehicule;
+import com.google.api.client.http.ByteArrayContent;
+import com.google.api.client.http.HttpContent;
 
 import classes.depot.Caserne;
 import classes.humain.Personnel;
@@ -55,6 +57,8 @@ public class Monde {
 						String requestBody = "{ \"intensite\": \"" + (f.getIntensity()-1) + "\"}";
 						com_feu.Misajour(f,requestBody);
 						System.out.println("le feu "+f.getId()+"diminue d\'intensité");
+						com_vehicule.change_produit(vehicule_intervention.getId(), (vehicule_intervention.getProduit()-1), vehicule_intervention.getType_produit());
+						
 					}
 				
 					else {

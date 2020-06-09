@@ -22,7 +22,7 @@ public class Monde {
 
 	public void evoluate() {
 		Random generator = new Random();
-		int number = generator.nextInt(10);
+		int number = generator.nextInt(3);
 		List<Fire> listfeu=com_feu.getincendies();
 		switch(number)
 	     {

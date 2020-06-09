@@ -56,7 +56,8 @@ function fct_tracer_circle(coord_x, coord_y, intensite, categorie){
       });
 
     var label = new L.marker([coord_x, coord_y], {icon: coloricon});
-    label.bindTooltip(categorie, {permanent: false });
+    var message="categorie "+ categorie + ", Intensité " + intensite
+    label.bindTooltip(message, {permanent: false });
     label.addTo(maCarte);
     list_marker.push(label);
 
@@ -74,10 +75,7 @@ function fct_tracer_sonde(coord_x, coord_y, type, alarme){
     var label = circle.bindPopup(type);
     list_marker.push(label);
 
-    if (alarme == 1){
-        var label_alarme = circle.bindPopup("alarme!").openPopup();
-        list_marker.push(label_alarme);
-    }
+    
 }
 
 
