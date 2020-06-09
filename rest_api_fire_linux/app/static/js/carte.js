@@ -11,27 +11,36 @@ accessToken: 'pk.eyJ1IjoiYWxpY2Vhc2kiLCJhIjoiY2s5MDkwZ3k1MDMwMDNscnI4dG50YmQwNCJ
 
 function fct_intensite_color(intensite){
     var fire_color;
-    if (intensite==1){
-	    fire_color='yellow';
+    var url;
+    if (intensite<12){
+        fire_color='yellow';
+        url='img/marker-icon-gold.png';
     }
-    else if (intensite==2){
-	    fire_color='orange';
+    else if (intensite<24){
+        fire_color='orange';
+        url='img/marker-icon-orange.png';
     }
-    else if (intensite==3){
-	    fire_color='red';
+    else if (intensite<36){
+        fire_color='red';
+        url='img/marker-icon-red.png';
     }
-    else if (intensite==4){
-	    fire_color='purple';
+    else if (intensite<48){
+        fire_color='purple';
+        url='img/marker-icon-violet.png';
     }
     else {
         fire_color='black';
+        url='img/marker-icon-black.png';
     }
-    return fire_color;
+    return { fct_fire_color: fire_color,
+            fct_url: url
+    };
 }
 
 
 function fct_tracer_circle(coord_x, coord_y, intensite, categorie){
-    var fire_color=fct_intensite_color(intensite);
+    var fire_color=fct_intensite_color(intensite).fct_fire_color;
+    var url=fct_intensite_color(intensite).fct_url;
     var circle = L.circle([coord_x, coord_y], {
         color: fire_color,
         fillOpacity: 1,
@@ -40,12 +49,20 @@ function fct_tracer_circle(coord_x, coord_y, intensite, categorie){
     maCarte.addLayer(circle);
     list_marker.push(circle);
 
-    var label = new L.marker([coord_x, coord_y], { opacity: 0.5});
-    label.bindTooltip(categorie, {permanent: false, offset: [0, 0] });
+    var coloricon = new L.Icon({
+        iconUrl: url,
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34]
+      });
+
+    var label = new L.marker([coord_x, coord_y], {icon: coloricon});
+    var message="categorie "+ categorie + ", Intensité " + intensite
+    label.bindTooltip(message, {permanent: false });
     label.addTo(maCarte);
     list_marker.push(label);
 
 }
+
 
 
 
@@ -83,7 +100,7 @@ function fct_affichage_feux(){
         complete : function(resultat, statut){
         }
     });
-    setTimeout(fct_affichage_feux,5000)
+    setTimeout(fct_affichage_feux,4000)
 }
 
 fct_affichage_feux();
