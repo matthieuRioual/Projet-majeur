@@ -87,6 +87,10 @@ function fct_tracer_vehicule(coord_x, coord_y, type_vehicule, type_produit, prod
     vehicule = L.imageOverlay(imageUrl, imageBounds);
     maCarte.addLayer(vehicule);
     list_marker.push(vehicule);
+
+    var message = "type de produit: " + type_produit + ", quantité véhicule: "+ produit + "quantité carburant: " + carburant;
+    var label = vehicule.bindPopup(message);
+    list_marker.push(label);
 }
 
 function fct_tracer_caserne(id_caserne,coord_x, coord_y){
